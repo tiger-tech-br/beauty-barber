@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react
 import { WorkspaceLayout } from '../components/WorkspaceLayout';
 import { useAccount } from '../hooks/useAccount';
 import { apiRequest } from '../lib/api';
-import { DEFAULT_TIMEZONE, formatInZone, todayInZone } from '../lib/dates';
+import { DEFAULT_TIMEZONE, formatInZone, shiftCalendarDate, todayInZone } from '../lib/dates';
 
 type Status = 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
 type Appointment = {
@@ -47,6 +47,7 @@ export function CalendarPage() {
   const { account, busy, error: accountError } = useAccount();
   const timezone = account?.establishmentTimezone ?? DEFAULT_TIMEZONE;
   const labelDate = (iso: string, opts?: Intl.DateTimeFormatOptions) => formatInZone(iso,timezone,opts);
+  const today = todayInZone(timezone);
   const [date, setDate] = useState(todayInZone);
   const [view, setView] = useState<View>('day');
   const [items, setItems] = useState<Appointment[]>([]);
@@ -126,7 +127,7 @@ export function CalendarPage() {
   function openEditor(reschedule = false, item?: Appointment) {
     setError(''); setNotice(''); setEditorOpen(true); setRescheduleMode(reschedule);
     setNewServiceId(item?.serviceId ?? ''); setNewCustomerId(item?.customerId ?? '');
-    setNewProfessionalId(item?.professionalId ?? ''); setNewDate(item ? labelDate(item.startsAt, { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/').reverse().join('-') : date);
+    setNewProfessionalId(item?.professionalId ?? ''); setNewDate(item ? labelDate(item.startsAt, { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/').reverse().join('-') : (date < today ? today : date));
     setNewStart(''); setNewNotes(item?.notes ?? '');
   }
 
@@ -168,10 +169,7 @@ export function CalendarPage() {
   }
 
   function shift(step: number) {
-    if (view === 'month') {
-      const next = new Date(`${date.slice(0, 7)}-01T12:00:00Z`); next.setUTCMonth(next.getUTCMonth() + step);
-      setDate(next.toISOString().slice(0, 10));
-    } else setDate(addDays(date, step * (view === 'week' ? 7 : 1)));
+    setDate((current) => shiftCalendarDate(current, view, step, todayInZone(timezone)));
   }
 
   if (busy) return <div className="page-state" role="status">Verificando sua conta…</div>;
@@ -185,8 +183,8 @@ export function CalendarPage() {
       {notice && <p className="form-success" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}
       <section className="calendar-shell" aria-label="Calendário">
         <div className="calendar-toolbar">
-          <div className="calendar-toolbar__left"><button className="calendar-nav" type="button" onClick={() => shift(-1)} aria-label="Período anterior">‹</button><button className="calendar-nav" type="button" onClick={() => shift(1)} aria-label="Próximo período">›</button><button className="calendar-today" type="button" onClick={() => setDate(todayInZone(timezone))}>Hoje</button><h2>{new Date(`${date}T12:00:00Z`).toLocaleDateString('pt-BR', { timeZone: 'UTC', month: 'long', year: 'numeric' })}</h2></div>
-          <div className="calendar-toolbar__right"><label className="sr-only" htmlFor="agenda-date">Data</label><input id="agenda-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} /><label className="sr-only" htmlFor="agenda-professional">Filtrar profissional</label><select id="agenda-professional" value={filterProfessional} onChange={(e) => setFilterProfessional(e.target.value)}><option value="">Todos os profissionais</option>{professionals.map((item) => <option key={item.id} value={item.id}>{item.fullName}</option>)}</select>
+          <div className="calendar-toolbar__left"><button className="calendar-nav" type="button" onClick={() => shift(-1)} disabled={shiftCalendarDate(date, view, -1, today) === date} aria-label="Período anterior">‹</button><button className="calendar-nav" type="button" onClick={() => shift(1)} aria-label="Próximo período">›</button><button className="calendar-today" type="button" onClick={() => setDate(todayInZone(timezone))}>Hoje</button><h2>{new Date(`${date}T12:00:00Z`).toLocaleDateString('pt-BR', { timeZone: 'UTC', month: 'long', year: 'numeric' })}</h2></div>
+          <div className="calendar-toolbar__right"><label className="sr-only" htmlFor="agenda-date">Data</label><input id="agenda-date" type="date" min={today} value={date} onChange={(e) => setDate(e.target.value < today ? today : e.target.value)} /><label className="sr-only" htmlFor="agenda-professional">Filtrar profissional</label><select id="agenda-professional" value={filterProfessional} onChange={(e) => setFilterProfessional(e.target.value)}><option value="">Todos os profissionais</option>{professionals.map((item) => <option key={item.id} value={item.id}>{item.fullName}</option>)}</select>
             <div className="calendar-view" aria-label="Modo da agenda">{(['day', 'week', 'month'] as View[]).map((option) => <button key={option} type="button" className={view === option ? 'is-selected' : ''} onClick={() => setView(option)} aria-pressed={view === option}>{option === 'day' ? 'Dia' : option === 'week' ? 'Semana' : 'Mês'}</button>)}</div>
           </div>
         </div>
@@ -217,7 +215,7 @@ export function CalendarPage() {
       {selected && !editorOpen && <section className="management-editor" aria-labelledby="appointment-details-title"><div className="management-editor__header"><div><p className="eyebrow">DETALHES DO ATENDIMENTO</p><h2 id="appointment-details-title">{selected.customerName}</h2></div><button type="button" className="close-editor" aria-label="Fechar detalhes" onClick={() => setSelected(null)}>×</button></div>
         <div className="calendar-detail"><p><strong>Serviço:</strong> {selected.serviceName} · {price(selected.priceCents)}</p><p><strong>Profissional:</strong> {selected.professionalName}</p><p><strong>Horário:</strong> {labelDate(selected.startsAt, { dateStyle: 'full', timeStyle: 'short' })}</p><p><strong>Situação:</strong> {statusLabels[selected.status]}</p>{selected.notes && <p><strong>Observações:</strong> {selected.notes}</p>}</div>
         <div className="calendar-detail__actions">{transitions[selected.status].map((next) => <button disabled={saving} className="button button--secondary" type="button" key={next} onClick={() => void changeStatus(next)}>{statusLabels[next]}</button>)}
-          {['pending','confirmed'].includes(selected.status) && <button className="button button--primary" type="button" onClick={() => openEditor(true, selected)}>Remarcar</button>}</div>
+          {['pending','confirmed'].includes(selected.status) && new Date(selected.startsAt).getTime() > Date.now() && <button className="button button--primary" type="button" onClick={() => openEditor(true, selected)}>Remarcar</button>}</div>
         <h3 className="calendar-detail__subtitle">Histórico</h3><ol className="calendar-history">{history.map((event, i) => <li key={`${i}-${event.createdAt}`}><span>{labelDate(event.createdAt, { dateStyle: 'short', timeStyle: 'short' })}</span><strong>{event.event === 'created' ? 'Agendamento criado' : event.event === 'rescheduled' ? 'Horário alterado' : `Situação: ${statusLabels[event.currentStatus]}`}</strong><small>{event.actorName ?? 'Sistema'}</small></li>)}</ol>
       </section>}
     </>}

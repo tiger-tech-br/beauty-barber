@@ -168,6 +168,47 @@ calendarRouter.get('/calendar', async (req, res) => {
   res.json({ zone, items: list.rows });
 });
 
+// Consulta histórica somente em lista, paginada e limitada ao estabelecimento autenticado.
+// A agenda interativa permanece reservada para hoje e datas futuras.
+calendarRouter.get('/calendar/history', async (req, res) => {
+  const parsed = z.object({
+    month: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),
+    page: z.coerce.number().int().min(1).max(10000).default(1),
+    q: z.string().trim().max(80).optional().default('')
+  }).strict().safeParse(req.query);
+  if (!parsed.success) { res.status(400).json({ error: 'Escolha um mês válido para consultar o histórico.' }); return; }
+
+  const { month, page, q } = parsed.data;
+  const establishmentId = ctx(res).establishmentId;
+  const zoneResult = await pool.query<{ timezone: string }>(
+    'SELECT timezone FROM establishments WHERE id=$1', [establishmentId]);
+  const zone = zoneResult.rows[0]?.timezone ?? 'America/Sao_Paulo';
+  const start = DateTime.fromISO(`${month}-01`, { zone }).startOf('day');
+  if (!start.isValid || start.toFormat('yyyy-MM') !== month || month >= DateTime.now().setZone(zone).toFormat('yyyy-MM')) {
+    res.status(400).json({ error: 'O histórico mostra somente meses anteriores ao atual.' }); return;
+  }
+  const end = start.plus({ months: 1 });
+  const args = [establishmentId, start.toJSDate(), end.toJSDate(), q];
+  const filter = `FROM appointments a
+    JOIN services s ON s.establishment_id=a.establishment_id AND s.id=a.service_id
+    JOIN professionals p ON p.establishment_id=a.establishment_id AND p.id=a.professional_id
+    JOIN customers c ON c.establishment_id=a.establishment_id AND c.id=a.customer_id
+    WHERE a.establishment_id=$1 AND a.starts_at >= $2 AND a.starts_at < $3
+      AND ($4::text = '' OR c.full_name ILIKE '%' || $4 || '%'
+        OR p.full_name ILIKE '%' || $4 || '%'
+        OR s.name ILIKE '%' || $4 || '%')`;
+  const pageSize = 50;
+  const [totalResult, list] = await Promise.all([
+    pool.query<{ total: string }>(`SELECT count(*)::text AS total ${filter}`, args),
+    pool.query(`SELECT a.id,a.starts_at AS "startsAt",a.ends_at AS "endsAt",a.status,
+      s.name AS "serviceName",p.full_name AS "professionalName",c.full_name AS "customerName",
+      a.price_cents AS "priceCents" ${filter}
+      ORDER BY a.starts_at DESC,a.id DESC LIMIT $5 OFFSET $6`,
+    [...args,pageSize,(page-1)*pageSize])
+  ]);
+  res.json({ zone, month, items: list.rows, total: Number(totalResult.rows[0]?.total ?? 0), page, pageSize });
+});
+
 calendarRouter.post('/calendar/appointments', async (req, res) => {
   const parsed = bookingSchema.safeParse(req.body);
   if (!parsed.success) { res.status(400).json({ error: 'Confira cliente, serviço, profissional, horário e observações.' }); return; }

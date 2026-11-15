@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
 import { test } from 'node:test';
+import { DateTime } from 'luxon';
 
 const raw = process.env.TEST_DATABASE_URL;
 if (!raw || !decodeURIComponent(new URL(raw).pathname).endsWith('_test')) {
@@ -143,6 +144,30 @@ test('isolamento de serviços e associações entre empresas', { timeout: 90000 
     assert.equal(customerResult.status, 201);
     const customerId = (await customerResult.json() as { id: string }).id;
 
+    // O histórico antigo é somente leitura e precisa manter o isolamento multiempresa.
+    // A inserção abaixo é fixture de teste: a API não permite criar reservas no passado.
+    const lastMonth = DateTime.now().setZone('America/Sao_Paulo').minus({ months: 1 }).toFormat('yyyy-MM');
+    const pastStart = DateTime.fromISO(`${lastMonth}-10T11:00`, { zone: 'America/Sao_Paulo' });
+    const businessOwner = await pool.query<{ establishment_id: string; user_id: string }>(`
+      SELECT m.establishment_id,m.user_id FROM memberships m
+      JOIN establishments e ON e.id=m.establishment_id
+      JOIN users u ON u.id=m.user_id
+      WHERE e.slug=$1 AND u.email=$2`, [slugs[0],emails[0]]);
+    const oldBooking = await pool.query<{ id: string }>(`
+      INSERT INTO appointments(establishment_id,service_id,professional_id,customer_id,starts_at,ends_at,
+        price_cents,status,created_by_user_id)
+      VALUES($1,$2,$3,$4,$5,$6,3500,'completed',$7) RETURNING id`,
+    [businessOwner.rows[0]!.establishment_id,id,professionalId,customerId,
+      pastStart.toJSDate(),pastStart.plus({ minutes: 40 }).toJSDate(),businessOwner.rows[0]!.user_id]);
+    const monthlyHistoryA = await request(`/api/calendar/history?month=${lastMonth}`,'GET',cookieA);
+    assert.equal(monthlyHistoryA.status,200);
+    assert.ok((await monthlyHistoryA.json() as {items:{id:string}[]}).items.some((item)=>item.id===oldBooking.rows[0]!.id));
+    const monthlyHistoryB = await request(`/api/calendar/history?month=${lastMonth}`,'GET',cookieB);
+    assert.equal(monthlyHistoryB.status,200);
+    assert.equal((await monthlyHistoryB.json() as {total:number}).total,0);
+    const currentMonth = DateTime.now().setZone('America/Sao_Paulo').toFormat('yyyy-MM');
+    assert.equal((await request(`/api/calendar/history?month=${currentMonth}`,'GET',cookieA)).status,400);
+
     // Exportação operacional deve exigir a senha e conter somente o estabelecimento ativo.
     const exportBadPassword = await request('/api/account/export', 'POST', cookieA, { password: 'senha-incorreta' });
     assert.equal(exportBadPassword.status, 401);
@@ -227,7 +252,7 @@ test('isolamento de serviços e associações entre empresas', { timeout: 90000 
 
     const historyA = await request(`/api/customers/${customerId}/history`, 'GET', cookieA);
     assert.equal(historyA.status, 200);
-    assert.equal((await historyA.json() as { items: unknown[] }).items.length, 1);
+    assert.equal((await historyA.json() as { items: unknown[] }).items.length, 2);
     const historyB = await request(`/api/customers/${customerId}/history`, 'GET', cookieB);
     assert.equal(historyB.status, 404, 'Outra empresa não pode consultar o histórico do cliente.');
 
@@ -240,7 +265,7 @@ test('isolamento de serviços e associações entre empresas', { timeout: 90000 
     assert.equal(customerExport.status,200);
     const exportedCustomer = await customerExport.json() as {data:{customer:{id:string};appointments:{id:string}[]}};
     assert.equal(exportedCustomer.data.customer.id,customerId);
-    assert.equal(exportedCustomer.data.appointments.length,1);
+    assert.equal(exportedCustomer.data.appointments.length,2);
     const audited = await pool.query<{ total:string }>(`SELECT count(*) AS total FROM data_export_events
       WHERE establishment_id=(SELECT establishment_id FROM customers WHERE id=$1) AND customer_id=$1`,[customerId]);
     assert.equal(Number(audited.rows[0]?.total),1,'A exportação individual precisa ficar registrada para auditoria.');
@@ -305,7 +330,20 @@ test('isolamento de serviços e associações entre empresas', { timeout: 90000 
     assert.equal((await request('/api/account/export', 'POST', cookieProfessional, { password: 'senha-segura-profissional' })).status, 403,
       'Profissionais não podem exportar dados pessoais de toda a empresa.');
   } finally {
-    if (slugs.length) await pool.query('DELETE FROM establishments WHERE slug = ANY($1::text[])', [slugs]);
+    if (slugs.length) {
+      const businesses = await pool.query<{ id: string }>(
+        'SELECT id FROM establishments WHERE slug = ANY($1::text[])', [slugs]);
+      const ids = businesses.rows.map((row) => row.id);
+      if (ids.length) {
+        // Limpeza explícita: histórico, pagamentos e convites referenciam memberships
+        // sem ON DELETE CASCADE. Uma exclusão direta do estabelecimento falharia.
+        for (const table of ['payment_records','appointment_history','appointments',
+          'team_invitations','billing_events','subscription_requests']) {
+          await pool.query(`DELETE FROM ${table} WHERE establishment_id = ANY($1::uuid[])`, [ids]);
+        }
+        await pool.query('DELETE FROM establishments WHERE id = ANY($1::uuid[])', [ids]);
+      }
+    }
     await pool.query('DELETE FROM users WHERE email = ANY($1::text[])', [emails]);
     await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     await pool.end();

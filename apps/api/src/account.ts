@@ -38,6 +38,9 @@ const specialHoursSchema = z.object({
   });
 const inviteLimiter = rateLimit({ windowMs: 60 * 60 * 1000, limit: 20, standardHeaders: 'draft-8', legacyHeaders: false });
 const exportLimiter = rateLimit({ windowMs: 60 * 60 * 1000, limit: 5, standardHeaders: 'draft-8', legacyHeaders: false,
+  // Usuários autenticados dividem IPs (ex.: salões na mesma rede ou NAT).
+  // O limite é por conta, não pela conexão compartilhada de todos os clientes.
+  keyGenerator: (_req,res) => (res.locals.auth as Context).userId,
   message: { error: 'Muitas tentativas de exportação. Aguarde antes de tentar novamente.' } });
 
 function who(res: { locals: Record<string,unknown> }): Context { return res.locals.auth as Context; }

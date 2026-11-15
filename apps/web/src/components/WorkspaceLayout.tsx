@@ -6,6 +6,7 @@ import { Logo } from './Logo';
 const links = [
   { label: 'Visão geral', to: '/painel', end: true },
   { label: 'Agenda', to: '/painel/agenda' },
+  { label: 'Histórico de agendamentos', to: '/painel/historico' },
   { label: 'Minha agenda', to: '/painel/minha-agenda' },
   { label: 'Serviços', to: '/painel/servicos' },
   { label: 'Profissionais', to: '/painel/profissionais' },

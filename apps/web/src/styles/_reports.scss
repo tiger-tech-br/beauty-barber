@@ -21,6 +21,13 @@
 .receipts-ledger { margin-top: 35px; }
 .receipts-ledger .report-filters { border: 0; padding: 0; margin: 0; }
 .receipts-ledger .management-toolbar { gap: 25px; flex-wrap: wrap; }
+.history-filters label:has(input[type='search']) { flex: 1 1 220px; }
+.history-panel { padding: 26px; }
+.history-panel__heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.history-panel__heading h2 { font: 400 24px $serif; margin: 0; }
+.history-panel__heading span, .history-pagination span { color: $muted; font-size: 12px; }
+.history-pagination { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; padding-top: 20px; }
+.history-pagination div { display: flex; flex-wrap: wrap; gap: 10px; }
 @media(max-width: 1000px) {
   .report-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .report-tables { grid-template-columns: 1fr; }

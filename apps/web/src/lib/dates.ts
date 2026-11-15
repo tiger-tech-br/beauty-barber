@@ -16,6 +16,20 @@ export function monthBoundsInZone(timezone = DEFAULT_TIMEZONE, reference = new D
   return { from: `${today.slice(0,7)}-01`, to: `${today.slice(0,7)}-${String(dayCount).padStart(2, '0')}` };
 }
 
+export function shiftMonth(month: string, amount: number): string {
+  const date = DateTime.fromISO(`${month}-01`, { zone: 'UTC' });
+  return date.plus({ months: amount }).toFormat('yyyy-MM');
+}
+
+/** A agenda operacional nunca navega para dias anteriores ao atual no fuso do estabelecimento. */
+export function shiftCalendarDate(date: string, view: 'day' | 'week' | 'month', step: number, today: string): string {
+  const start = DateTime.fromISO(date, { zone: 'UTC' });
+  const candidate = view === 'month'
+    ? start.startOf('month').plus({ months: step }).toISODate()
+    : start.plus({ days: step * (view === 'week' ? 7 : 1) }).toISODate();
+  return candidate && candidate >= today ? candidate : today;
+}
+
 export function formatInZone(
   value: string | Date,
   timezone = DEFAULT_TIMEZONE,

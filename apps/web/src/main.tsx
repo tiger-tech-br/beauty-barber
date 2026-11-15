@@ -12,6 +12,7 @@ import { BillingPage } from './pages/BillingPage';
 import { PlatformBillingPage } from './pages/PlatformBillingPage';
 import { PlatformEstablishmentsPage } from './pages/PlatformEstablishmentsPage';
 import { CalendarPage } from './pages/CalendarPage';
+import { AppointmentHistoryPage } from './pages/AppointmentHistoryPage';
 import { MyAgendaPage } from './pages/MyAgendaPage';
 import { PublicBookingPage } from './pages/PublicBookingPage';
 import { PublicBookingActionPage } from './pages/PublicBookingActionPage';
@@ -35,6 +36,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/painel/clientes" element={<CustomersPage />} />
         <Route path="/painel/assinatura" element={<BillingPage />} />
         <Route path="/painel/agenda" element={<CalendarPage />} />
+        <Route path="/painel/historico" element={<AppointmentHistoryPage />} />
         <Route path="/painel/minha-agenda" element={<MyAgendaPage />} />
         <Route path="/painel/recebimentos" element={<ReceiptsPage />} />
         <Route path="/painel/relatorios" element={<ReportsPage />} />
