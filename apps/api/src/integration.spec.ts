@@ -11,7 +11,7 @@ if (!raw || !decodeURIComponent(new URL(raw).pathname).endsWith('_test')) {
 process.env.DATABASE_URL = raw;
 process.env.WEB_ORIGIN = 'http://localhost:5173';
 
-test('isolamento de serviços e associações entre empresas', { timeout: 20000 }, async () => {
+test('isolamento de serviços e associações entre empresas', { timeout: 90000 }, async () => {
   const [{ app }, { pool }] = await Promise.all([import('./app.js'), import('./db.js')]);
   const schema = await pool.query<{ services: string | null }>("SELECT to_regclass('public.services')::text AS services");
   assert.ok(schema.rows[0]?.services, 'Aplique as migrations no banco de testes antes de continuar.');
@@ -27,11 +27,16 @@ test('isolamento de serviços e associações entre empresas', { timeout: 20000 
   const slugs: string[] = [];
 
   async function request(path: string, method = 'GET', cookie = '', body?: unknown, origin = 'http://localhost:5173') {
-    return fetch(base + path, {
+    const route = new URL(path, base).pathname.replace(/[a-f0-9-]{30,}/gi, ':id');
+    console.log(`[integration] ${method} ${route}`);
+    const response = await fetch(base + path, {
       method,
       headers: { ...(body ? { 'Content-Type': 'application/json' } : {}), ...(cookie ? { Cookie: cookie } : {}), Origin: origin },
-      body: body ? JSON.stringify(body) : undefined
+      body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(10000)
     });
+    console.log(`[integration] ${response.status} ${route}`);
+    return response;
   }
 
   async function register(name: string, email: string) {

@@ -48,7 +48,7 @@ jobs:
       - name: Executar testes de unidade
         run: npm test
       - name: Executar integracao multiempresa no PostgreSQL
-        run: npm run test:integration -w @studio/api
+        run: timeout --signal=TERM --kill-after=10s 150s npm run test:integration -w @studio/api
       - name: Compilar API e frontend
         run: npm run build
 
