@@ -1,0 +1,54 @@
+name: BeautyBarber verificacoes
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: beautybarber_ci
+          POSTGRES_PASSWORD: ci_only_password
+          POSTGRES_DB: beautybarber_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U beautybarber_ci -d beautybarber_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 15
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://beautybarber_ci:ci_only_password@127.0.0.1:5432/beautybarber_test
+      TEST_DATABASE_URL: postgresql://beautybarber_ci:ci_only_password@127.0.0.1:5432/beautybarber_test
+      WEB_ORIGIN: http://localhost:5173
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Conferir TypeScript
+        run: npm run check
+      - name: Aplicar migrations no banco temporario
+        run: npm run db:migrate
+      - name: Executar testes de unidade
+        run: npm test
+      - name: Executar integracao multiempresa no PostgreSQL
+        run: npm run test:integration -w @studio/api
+      - name: Compilar API e frontend
+        run: npm run build
+

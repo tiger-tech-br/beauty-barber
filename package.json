@@ -1,0 +1,17 @@
+{
+  "name": "studio-saas",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": ["apps/web", "apps/api"],
+  "scripts": {
+    "dev:web": "npm run dev -w @studio/web",
+    "dev:api": "npm run dev -w @studio/api",
+    "build": "npm run build -w @studio/api && npm run build -w @studio/web",
+    "test": "npm run test -w @studio/api && npm run test -w @studio/web",
+    "test:integration": "npm run test:integration -w @studio/api",
+    "db:migrate": "npm run db:migrate -w @studio/api",
+    "check": "npm run check -w @studio/api && npm run check -w @studio/web"
+  },
+  "engines": { "node": ">=22.12.0" }
+}

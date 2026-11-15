@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BeautyBarberTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">#244B50</item>
+        <item name="android:navigationBarColor">#244B50</item>
+        <item name="android:windowBackground">#F7F6F3</item>
+    </style>
+</resources>

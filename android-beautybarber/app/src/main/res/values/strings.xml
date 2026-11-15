@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BeautyBarber</string>
+    <string name="offline_title">Não foi possível conectar</string>
+    <string name="offline_message">Verifique sua conexão com a internet e tente novamente.</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="unconfigured">O endereço HTTPS do BeautyBarber ainda não foi configurado. Informe beautybarberUrl ao compilar o APK.</string>
+</resources>

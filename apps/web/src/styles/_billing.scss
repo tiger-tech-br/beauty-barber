@@ -1,0 +1,35 @@
+@use 'tokens' as *;
+
+.billing-status { border: 1px solid $border; background: white; padding: 33px; display: flex; gap: 30px; align-items: start; justify-content: space-between; }
+.billing-status h2 { font: 400 28px $serif; margin: 13px 0 9px; }
+.billing-status p:last-child { max-width: 580px; line-height: 1.8; color: $muted; font-size: 13px; }
+.billing-section { margin-top: 47px; }
+.billing-section__title { margin-bottom: 25px; }
+.billing-section__title h2 { font: 400 29px $serif; margin: 12px 0; letter-spacing: -.03em; }
+.billing-section__title > p:last-child { color: $muted; max-width: 700px; font-size: 13px; line-height: 1.85; }
+.billing-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.billing-plan { background: white; border: 1px solid $border; padding: 32px; display: flex; flex-direction: column; align-items: flex-start; }
+.billing-plan__type { color: $accent; letter-spacing: .18em; font-size: 10px; font-weight: 800; }
+.billing-plan h3 { margin: 24px 0 10px; font: 400 27px/1.18 $serif; }
+.billing-plan p { color: $muted; font-size: 13px; line-height: 1.7; }
+.billing-plan .billing-plan__note { border-top: 1px solid $border; padding-top: 17px; margin-top: auto; width: 100%; font-size: 11px; }
+.billing-plan .button { margin-top: 18px; }
+.billing-verification { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; background: white; border: 1px solid $border; padding: 30px; }
+.billing-verification label { display: flex; flex-direction: column; gap: 9px; font-size: 12px; font-weight: 700; }
+.billing-verification input, .billing-verification select { border: 1px solid #cfd7d2; border-radius: 3px; padding: 13px; color: $ink; min-width: 0; background: #fcfcfa; font: inherit; }
+.billing-verification button { justify-self: start; align-self: end; }
+.billing-empty { color: $muted; font-size: 13px; padding: 27px; background: white; border: 1px solid $border; }
+.billing-warning { background: #fcf6ef; border-left: 3px solid $accent; color: #66544b; padding: 20px; font-size: 13px; line-height: 1.8; margin-bottom: 28px; }
+.landing-plans { padding: 100px 0; background: $paper; border-top: 1px solid $border; }
+.landing-plans__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.landing-plans__grid article { padding: 35px; background: $bg; border: 1px solid $border; }
+.landing-plans__grid strong { letter-spacing: .14em; font-size: 10px; color: $accent; }
+.landing-plans__grid h3 { font: 400 30px/1.25 $serif; margin: 20px 0 12px; }
+.landing-plans__grid p { color: $muted; line-height: 1.8; font-size: 13px; }
+.landing-plans__disclaimer { color: $muted; font-size: 12px; line-height: 1.8; margin-top: 26px; }
+@media (max-width: 760px) {
+  .billing-grid, .billing-verification, .landing-plans__grid { grid-template-columns: 1fr; }
+  .landing-plans { padding-block: 75px; }
+  .billing-status { flex-direction: column; padding: 24px; }
+  .billing-plan, .billing-verification { padding: 24px; }
+}

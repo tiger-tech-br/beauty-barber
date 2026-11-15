@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.application'
+}
+
+def remoteUrl = (project.findProperty('beautybarberUrl') ?: 'https://beautybarber.tigertech.dev.br').toString()
+def parsedUrl = new URI(remoteUrl)
+if (parsedUrl.scheme != 'https' || !parsedUrl.host || parsedUrl.userInfo || parsedUrl.port != -1 || parsedUrl.query || parsedUrl.fragment || (parsedUrl.path && parsedUrl.path != '/')) {
+    throw new GradleException('beautybarberUrl deve ser a origem HTTPS pública do BeautyBarber, sem caminho, porta, parâmetros ou credenciais.')
+}
+
+android {
+    namespace 'br.com.tigertech.beautybarber'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'br.com.tigertech.beautybarber'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0'
+        buildConfigField 'String', 'APP_URL', '"' + remoteUrl + '"'
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // Assinatura de distribuição deverá ser configurada com chave privada
+            // do proprietário. Nunca inclua um keystore real no ZIP ou no git.
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

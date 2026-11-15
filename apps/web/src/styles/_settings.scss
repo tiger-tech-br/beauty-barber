@@ -1,0 +1,17 @@
+@use 'tokens' as *;
+
+.settings-section { margin-bottom: 25px; }
+.settings-description { font-size: 12px; color: $muted; line-height: 1.8; margin: 0 0 20px; }
+.settings-description code { color: $primary; font-weight: 700; }
+.settings-logo-preview { min-height: 110px; max-width: 360px; display: flex; align-items: center; justify-content: center; background: #f7f9f7; border: 1px dashed #cbd5cf; margin: 0 0 22px; padding: 15px; }
+.settings-logo-preview img { display: block; max-width: 100%; max-height: 145px; width: auto; height: auto; object-fit: contain; }
+.settings-logo-preview p { color: $muted; font-size: 12px; line-height: 1.6; text-align: center; }
+.settings-subheading { font: 400 22px $serif; margin: 35px 0 19px; }
+.settings-invite { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto; align-items: end; gap: 15px; }
+.settings-invite label, .settings-invite-link label { display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; }
+.settings-invite input, .settings-invite select, .settings-invite-link input, .settings-select { width: 100%; min-width: 0; border: 1px solid #d4d9d4; border-radius: 3px; background: white; color: $ink; padding: 11px; }
+.settings-select { padding: 7px; max-width: 155px; font-size: 11px; }
+.settings-invite-link { margin-top: 20px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 15px; padding: 20px; background: #e8eeea; }
+@media(max-width: 730px) {
+  .settings-invite, .settings-invite-link { grid-template-columns: 1fr; }
+}
