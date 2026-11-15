@@ -27,6 +27,7 @@
 .text-button:hover { color: $accent; }
 .dashboard-content { margin-inline: auto; width: min(100%, 1400px); padding: 47px 52px; }
 .dashboard-heading { display: flex; justify-content: space-between; align-items: end; gap: 40px; margin-bottom: 44px; }
+.dashboard-create-booking { white-space: nowrap; flex-shrink: 0; }
 .dashboard-heading h1 { font: 400 clamp(31px, 3vw, 43px)/1.2 $serif; letter-spacing: -.04em; margin: 16px 0 13px; }
 .dashboard-heading p:last-child { color: $muted; font-size: 13px; margin: 0; }
 .dashboard-place { border-left: 2px solid #d3d4cb; padding-left: 19px; min-width: 165px; }

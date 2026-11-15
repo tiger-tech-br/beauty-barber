@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { WorkspaceLayout } from '../components/WorkspaceLayout';
+import { PlatformLayout } from '../components/PlatformLayout';
 import { useAccount } from '../hooks/useAccount';
 import { apiRequest } from '../lib/api';
 
@@ -13,6 +13,7 @@ type Data = { items: Business[]; summary: { total: number; current: number; susp
 export function PlatformEstablishmentsPage() {
   const { account, busy, error: authError } = useAccount();
   const [data, setData] = useState<Data | null>(null);
+  const [pendingCount, setPendingCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Business | null>(null);
   const [note, setNote] = useState('');
@@ -20,7 +21,14 @@ export function PlatformEstablishmentsPage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
-  const load = useCallback(async () => setData(await apiRequest<Data>('/api/platform/establishments')), []);
+  const load = useCallback(async () => {
+    const [businesses, pending] = await Promise.all([
+      apiRequest<Data>('/api/platform/establishments'),
+      apiRequest<{ items: unknown[] }>('/api/platform/billing-requests')
+    ]);
+    setData(businesses);
+    setPendingCount(pending.items.length);
+  }, []);
   useEffect(() => {
     if (!account?.isPlatformAdmin) { setLoading(false); return; }
     let active = true;
@@ -47,12 +55,12 @@ export function PlatformEstablishmentsPage() {
   if (busy || loading) return <div className="page-state" role="status">Carregando administração…</div>;
   if (!account) return <div className="page-state" role="alert">{authError || 'Entre na conta para continuar.'}</div>;
 
-  return <WorkspaceLayout account={account}>
-    <header className="management-heading"><div><p className="eyebrow">ADMINISTRAÇÃO GERAL</p><h1>Estabelecimentos</h1><p>Panorama operacional da plataforma, sem acesso a dados pessoais dos clientes.</p></div></header>
+  return <PlatformLayout account={account}>
+    <header className="management-heading"><div><p className="eyebrow">ADMINISTRAÇÃO DA PLATAFORMA</p><h1>Gestão de assinaturas</h1><p>Estabelecimentos e situação das assinaturas, sem acesso a dados pessoais dos clientes.</p></div></header>
     {!account.isPlatformAdmin ? <p className="form-error" role="alert">Acesso restrito à administração da plataforma.</p> : <>
       {error && <p className="form-error" role="alert">{error}</p>}
       {notice && <p className="form-success" role="status">{notice}</p>}
-      <section className="billing-status" aria-label="Resumo da plataforma"><div><p className="eyebrow">ESTABELECIMENTOS</p><h2>{data?.summary.total ?? 0} cadastrados</h2><p>{data?.summary.current ?? 0} assinaturas ativas e vigentes · {data?.summary.suspended ?? 0} suspensas.</p></div></section>
+      <section className="platform-metrics" aria-label="Resumo real da plataforma"><article><span>Estabelecimentos cadastrados</span><strong>{data?.summary.total ?? 0}</strong></article><article><span>Assinaturas vigentes</span><strong>{data?.summary.current ?? 0}</strong></article><article><span>Suspensas</span><strong>{data?.summary.suspended ?? 0}</strong></article><article><span>Aguardando conferência</span><strong>{pendingCount ?? '—'}</strong></article></section>
       <section className="management-panel"><div className="management-toolbar"><strong>Últimos estabelecimentos cadastrados</strong></div>
         {!data?.items.length ? <p className="empty-records">Nenhum estabelecimento cadastrado.</p> : <div className="record-table-wrap"><table className="record-table"><thead><tr><th>Estabelecimento</th><th>Ciclo</th><th>Assinatura</th><th>Válida até</th><th><span className="sr-only">Ação</span></th></tr></thead><tbody>
           {data.items.map((item) => <tr key={item.id}><td className="record-table__primary">{item.name}<small> · {item.slug}</small></td>
@@ -72,5 +80,5 @@ export function PlatformEstablishmentsPage() {
         </form>
       </section>}
     </>}
-  </WorkspaceLayout>;
+  </PlatformLayout>;
 }

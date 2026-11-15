@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { WorkspaceLayout } from '../components/WorkspaceLayout';
+import { PlatformLayout } from '../components/PlatformLayout';
 import { useAccount } from '../hooks/useAccount';
 import { apiRequest } from '../lib/api';
 
@@ -60,7 +60,7 @@ export function PlatformBillingPage() {
   if (busy || loading) return <div className="page-state" role="status">Carregando solicitações…</div>;
   if (!account) return <div className="page-state" role="alert">{accountError || 'Entre na conta para continuar.'}</div>;
 
-  return <WorkspaceLayout account={account}>
+  return <PlatformLayout account={account}>
     <header className="management-heading"><div><p className="eyebrow">ADMINISTRAÇÃO GERAL</p><h1>Conferência de assinaturas</h1><p>Reveja os pagamentos no painel do PagBank antes de tomar qualquer decisão.</p></div></header>
     {!account.isPlatformAdmin ? <p className="form-error">Acesso restrito à administração da plataforma.</p> : <>
       <p className="billing-warning"><strong>Atenção:</strong> nome, e-mail e identificador informados pelo cliente não comprovam pagamento. Abra o PagBank separadamente e confirme o pagamento recorrente, período, titular e ausência de cancelamento.</p>
@@ -80,5 +80,5 @@ export function PlatformBillingPage() {
           <div className="management-form__actions"><button type="button" disabled={saving} className="button button--secondary" onClick={() => void decide('reject')}>Recusar solicitação</button><button type="submit" className="button button--primary" disabled={saving}>{saving ? 'Processando…' : 'Confirmar pagamento e ativar'}</button></div>
         </form></section>}
     </>}
-  </WorkspaceLayout>;
+  </PlatformLayout>;
 }

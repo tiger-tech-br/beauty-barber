@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { apiRequest, ApiResponseError, type UserAccount } from '../lib/api';
+import { hasAreaAccess, panelHome } from '../lib/panel-access';
 
 export function useAccount() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [account, setAccount] = useState<UserAccount | null>(null);
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState('');
@@ -11,7 +13,14 @@ export function useAccount() {
   useEffect(() => {
     let active = true;
     apiRequest<{ account: UserAccount }>('/api/auth/me')
-      .then((response) => { if (active) setAccount(response.account); })
+      .then((response) => {
+        if (!active) return;
+        if (!hasAreaAccess(response.account, location.pathname)) {
+          navigate(panelHome(response.account), { replace: true });
+          return;
+        }
+        setAccount(response.account);
+      })
       .catch((cause: unknown) => {
         if (!active) return;
         if (cause instanceof ApiResponseError && cause.status === 401) navigate('/entrar', { replace: true });
@@ -19,7 +28,7 @@ export function useAccount() {
       })
       .finally(() => { if (active) setBusy(false); });
     return () => { active = false; };
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   return { account, busy, error };
 }

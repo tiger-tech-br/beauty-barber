@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { WorkspaceLayout } from '../components/WorkspaceLayout';
 import { useAccount } from '../hooks/useAccount';
 import { apiRequest } from '../lib/api';
@@ -44,6 +45,8 @@ function viewRange(date: string, view: View) {
   return { start, end: next.toISOString().slice(0, 10) };
 }
 export function CalendarPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { account, busy, error: accountError } = useAccount();
   const timezone = account?.establishmentTimezone ?? DEFAULT_TIMEZONE;
   const labelDate = (iso: string, opts?: Intl.DateTimeFormatOptions) => formatInZone(iso,timezone,opts);
@@ -130,6 +133,12 @@ export function CalendarPage() {
     setNewProfessionalId(item?.professionalId ?? ''); setNewDate(item ? labelDate(item.startsAt, { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/').reverse().join('-') : (date < today ? today : date));
     setNewStart(''); setNewNotes(item?.notes ?? '');
   }
+
+  useEffect(() => {
+    if (!account || account.role === 'professional' || !new URLSearchParams(location.search).has('novo')) return;
+    openEditor();
+    navigate('/painel/agenda', { replace: true });
+  }, [account, location.search, navigate]);
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setSaving(true); setError(''); setNotice('');

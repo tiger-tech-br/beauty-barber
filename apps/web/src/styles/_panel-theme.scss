@@ -1,0 +1,84 @@
+@use 'tokens' as *;
+
+// Preferência visual limitada aos painéis privados; página pública e login ficam inalterados.
+.dashboard-topbar__actions { display: flex; align-items: center; gap: clamp(12px, 2vw, 28px); }
+.theme-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-size: 12px; font-weight: 700; color: $primary; user-select: none; }
+.theme-switch input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.theme-switch__track { flex: 0 0 auto; width: 45px; height: 25px; border-radius: 999px; background: #cfd8d3; border: 1px solid #b5c4bd; padding: 3px; display: flex; align-items: center; transition: background .2s; }
+.theme-switch__thumb { width: 17px; height: 17px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px #0004; transform: translateX(0); transition: transform .2s; }
+.theme-switch input:checked + .theme-switch__track { background: $primary; border-color: $primary; }
+.theme-switch input:checked + .theme-switch__track .theme-switch__thumb { transform: translateX(19px); }
+.theme-switch input:focus-visible + .theme-switch__track { outline: 3px solid $accent; outline-offset: 3px; }
+
+.platform-layout .dashboard-sidebar { background: #153438; }
+.platform-layout .dashboard-sidebar__brand > span { color: #dbb99e; }
+.platform-security-mark { color: $accent; }
+.platform-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; margin: 0 0 28px; }
+.platform-metrics article { background: white; border: 1px solid $border; border-radius: 9px; padding: 24px 21px; }
+.platform-metrics article span { display: block; color: $muted; font-size: 12px; line-height: 1.5; }
+.platform-metrics article strong { display: block; margin-top: 11px; color: $primary; font-size: 33px; line-height: 1.1; }
+.platform-layout .management-panel, .platform-layout .management-editor { border-radius: 10px; overflow: hidden; }
+.platform-layout .record-table th { background: #f4f5f2; }
+
+// Grafite/negro para uso em barbearias, mantendo contraste nos textos e formulários.
+.dashboard-layout[data-theme='dark'] {
+  color-scheme: dark;
+  background: #101413;
+  color: #eff1ed;
+}
+.dashboard-layout[data-theme='dark'] .dashboard-main { background: #101413; }
+.dashboard-layout[data-theme='dark'] .dashboard-sidebar { background: #080e0e; border-right: 1px solid #2b3836; }
+.dashboard-layout[data-theme='dark'] .dashboard-sidebar__active { background: #243a39; border-left-color: #c58c69; color: #fff; }
+.dashboard-layout[data-theme='dark'] .dashboard-sidebar__link:hover { background: #1d302e; }
+.dashboard-layout[data-theme='dark'] .dashboard-topbar { background: #171e1d; border-color: #303a38; }
+.dashboard-layout[data-theme='dark'] .dashboard-topbar__label,
+.dashboard-layout[data-theme='dark'] .theme-switch { color: #dee9e1; }
+.dashboard-layout[data-theme='dark'] .theme-switch input:checked + .theme-switch__track { background: #b8795c; border-color: #b8795c; }
+.dashboard-layout[data-theme='dark'] .text-button { color: #d4a486; }
+.dashboard-layout[data-theme='dark'] .dashboard-heading h1,
+.dashboard-layout[data-theme='dark'] .management-heading h1,
+.dashboard-layout[data-theme='dark'] .dashboard-place strong { color: #f6f2eb; }
+.dashboard-layout[data-theme='dark'] :is(.dashboard-heading p:last-child, .management-heading p:last-child, .operations__heading > span, .dashboard-footer, .dashboard-place span, .dashboard-upcoming__empty, .management-hint, .settings-description, .report-empty, .history-panel__heading span, .history-pagination span, .calendar-placeholder, .calendar-empty-column, .calendar-history span, .calendar-history small) { color: #aebcb7; }
+.dashboard-layout[data-theme='dark'] :is(.management-panel, .management-editor, .setup-panel, .setup-panel__steps, .operations__grid article, .dashboard-summary section, .billing-status, .billing-plan, .billing-verification, .billing-empty, .calendar-shell, .calendar-list__item, .report-filters, .report-metrics article, .report-money article, .settings-invite-link, .platform-metrics article) {
+  background: #1b2321; border-color: #35423e; color: #eff1ed;
+}
+.dashboard-layout[data-theme='dark'] :is(.setup-panel__side, .dashboard-summary section:first-child, .report-money article:nth-child(2), .report-money article, .settings-logo-preview) { background: #24312d; border-color: #3b5049; }
+.dashboard-layout[data-theme='dark'] :is(.setup-panel__side h2, .setup-step strong, .operations__grid article strong, .dashboard-summary strong, .dashboard-summary h2, .record-table__primary, .block-list__item strong, .platform-metrics article strong, .report-metrics strong, .report-money strong, .management-toolbar strong, .empty-records strong, .calendar-detail p strong) { color: #f2eee6 !important; }
+.dashboard-layout[data-theme='dark'] :is(.setup-panel__side p, .setup-step small, .step-count, .setup-step__status, .operations__grid article span, .operations__grid article small, .dashboard-summary small, .management-panel p, .management-toolbar small, .record-table td, .record-table__primary small, .block-list__item small, .platform-metrics article span, .report-metrics article span, .report-money span, .report-money small, .billing-plan p, .billing-status p:last-child, .billing-section__title > p:last-child, .calendar-detail p, .calendar-appointment span, .calendar-list__item span, .calendar-list__item small, .calendar-list__item time, .settings-logo-preview p, .empty-records p) { color: #b4c1ba; }
+.dashboard-layout[data-theme='dark'] :is(.record-table th, .platform-layout .record-table th) { background: #202b28; color: #d0dcd4; }
+.dashboard-layout[data-theme='dark'] :is(.record-table td, .record-table tr, .management-toolbar, .management-editor__header, .calendar-toolbar, .calendar-column, .calendar-column h3, .calendar-history li, .block-list__item, .setup-step, .calendar-list__item, .calendar-detail__actions) { border-color: #34423d; }
+.dashboard-layout[data-theme='dark'] :is(.management-form input, .management-form select, .management-form textarea, .hours-form input, .hours-form select, .dashboard-business-select, .search-field input, .report-filters input, .calendar-toolbar input, .calendar-toolbar select, .settings-invite input, .settings-invite select, .settings-invite-link input, .settings-select, .billing-verification input, .billing-verification select) { color: #ecf0eb; background: #111a18; border-color: #46564e; color-scheme: dark; }
+.dashboard-layout[data-theme='dark'] :is(.management-form label, .hours-row label, .report-filters label, .settings-invite label, .settings-invite-link label, .billing-verification label) { color: #e5eae3; }
+.dashboard-layout[data-theme='dark'] :is(.calendar-nav, .calendar-today, .calendar-view button, .calendar-appointment, .calendar-list__item, .button--secondary, .close-editor) { background: #26322e; color: #eceee8; border-color: #45564f; }
+.dashboard-layout[data-theme='dark'] :is(.calendar-appointment:hover, .calendar-list__item:hover, .setup-step:hover) { background: #32423a; }
+.dashboard-layout[data-theme='dark'] .calendar-appointment time { color: #dca585; }
+.dashboard-layout[data-theme='dark'] .calendar-appointment small { color: #e4b795; }
+.dashboard-layout[data-theme='dark'] .calendar-view .is-selected { background: #b8795c; color: #101413; }
+.dashboard-layout[data-theme='dark'] .button--primary { background: #b8795c; color: #161b19; border-color: #b8795c; }
+.dashboard-layout[data-theme='dark'] .button--primary:hover { background: #d29c79; }
+.dashboard-layout[data-theme='dark'] .record-link,
+.dashboard-layout[data-theme='dark'] .dashboard-public-link a,
+.dashboard-layout[data-theme='dark'] .settings-description code { color: #e0ac8a; }
+.dashboard-layout[data-theme='dark'] .dashboard-public-link code { color: #aebbb4; }
+.dashboard-layout[data-theme='dark'] .billing-warning { background: #392a20; color: #f3d3b8; border-color: #c58c69; }
+.dashboard-layout[data-theme='dark'] .form-success { background: #173325; color: #b9e3c6; border-color: #3d805b; }
+.dashboard-layout[data-theme='dark'] .form-error { background: #46251f; color: #f5c0b4; border-color: #8f483e; }
+.dashboard-layout[data-theme='dark'] .status-pill { background: #413229; color: #f3cca5; }
+.dashboard-layout[data-theme='dark'] .status-pill--active { background: #193b2a; color: #b3ecc2; }
+
+@media (max-width: 1100px) { .platform-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) {
+  .theme-switch__label { display: none; }
+  .dashboard-topbar__actions { gap: 12px; }
+  .platform-metrics { grid-template-columns: 1fr 1fr; }
+  .platform-metrics article { padding: 17px; }
+}
+@media (max-width: 450px) {
+  .dashboard-topbar__label { font-size: 10px; }
+  .platform-layout .dashboard-topbar__label { max-width: 135px; }
+  .platform-metrics { grid-template-columns: 1fr; }
+  .text-button { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch__track, .theme-switch__thumb { transition: none; }
+}
