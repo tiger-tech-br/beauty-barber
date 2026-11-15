@@ -91,10 +91,21 @@ test('fechar domingo exige remarcar agendamentos futuros que sairiam do expedien
 
 test('data deve ser válida e limitar reservas aos próximos 90 dias', () => {
   const now = DateTime.fromISO('2026-11-15T12:00:00', { zone: 'America/Sao_Paulo' });
+  assert.equal(validBookingDate('2026-11-15', 'America/Sao_Paulo', now), true);
   assert.equal(validBookingDate('2026-11-16', 'America/Sao_Paulo', now), true);
   assert.equal(validBookingDate('2026-11-14', 'America/Sao_Paulo', now), false);
   assert.equal(validBookingDate('2027-06-01', 'America/Sao_Paulo', now), false);
   assert.equal(validBookingDate('2026-02-30', 'America/Sao_Paulo', now), false);
+});
+
+test('hoje permite somente horários futuros; ontem nunca permite agendar', () => {
+  const nowMillis = DateTime.fromISO('2026-11-16T10:30:00', { zone: 'America/Sao_Paulo' }).toMillis();
+  const periods = [{ weekday: 1, startMinute: 540, endMinute: 720 }];
+  const today = generateSlots({ ...baseInput, date: '2026-11-16', periods, nowMillis });
+  assert.equal(today.some((slot) => slot.time === '09:00'), false);
+  assert.equal(today.some((slot) => slot.time === '10:30'), false);
+  assert.equal(today.some((slot) => slot.time === '10:45'), true);
+  assert.deepEqual(generateSlots({ ...baseInput, date: '2026-11-09', periods, nowMillis }), []);
 });
 
 test('status não permite voltar de concluído para confirmado', () => {
