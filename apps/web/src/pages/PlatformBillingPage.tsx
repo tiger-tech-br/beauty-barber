@@ -65,6 +65,7 @@ export function PlatformBillingPage() {
     {!account.isPlatformAdmin ? <p className="form-error">Acesso restrito à administração da plataforma.</p> : <>
       <p className="billing-warning"><strong>Atenção:</strong> nome, e-mail e identificador informados pelo cliente não comprovam pagamento. Abra o PagBank separadamente e confirme o pagamento recorrente, período, titular e ausência de cancelamento.</p>
       {notice && <p className="form-success" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}
+      <div className={`platform-review-layout ${selected ? 'platform-review-layout--selected' : ''}`}>
       <section className="management-panel"><div className="management-toolbar"><strong>{items.length} solicitação(ões) pendente(s)</strong></div>
         {!items.length ? <div className="empty-records"><strong>Tudo conferido por enquanto.</strong><p>Nenhuma solicitação aguarda revisão.</p></div> : <div className="record-table-wrap"><table className="record-table"><thead><tr><th>Estabelecimento</th><th>Plano</th><th>E-mail informado</th><th>Enviada em</th><th><span className="sr-only">Ações</span></th></tr></thead><tbody>{items.map((item) => <tr key={item.id}>
           <td className="record-table__primary">{item.establishmentName}</td><td>{item.billingCycle === 'monthly' ? 'Mensal' : 'Anual'}</td><td>{item.billingEmail}</td><td>{new Date(item.createdAt).toLocaleDateString('pt-BR')}</td>
@@ -79,6 +80,7 @@ export function PlatformBillingPage() {
           <label className="management-form__wide">Observação administrativa<input maxLength={400} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Opcional ao aprovar; obrigatório ao recusar" /></label>
           <div className="management-form__actions"><button type="button" disabled={saving} className="button button--secondary" onClick={() => void decide('reject')}>Recusar solicitação</button><button type="submit" className="button button--primary" disabled={saving}>{saving ? 'Processando…' : 'Confirmar pagamento e ativar'}</button></div>
         </form></section>}
+      </div>
     </>}
   </PlatformLayout>;
 }
