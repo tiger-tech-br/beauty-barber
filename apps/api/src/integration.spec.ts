@@ -36,8 +36,8 @@ test('isolamento de serviços e associações entre empresas', { timeout: 20000 
 
   async function register(name: string, email: string) {
     const res = await request('/api/auth/register', 'POST', '', { fullName: 'Teste Isolamento', establishmentName: name, email, password: 'senha-segura-para-testar' });
-    assert.equal(res.status, 201, await res.text());
     const data = await res.json() as { establishment: { slug: string } };
+    assert.equal(res.status, 201, JSON.stringify(data));
     slugs.push(data.establishment.slug);
     const cookie = res.headers.get('set-cookie')?.split(';')[0];
     assert.ok(cookie, 'O servidor deve criar um cookie de sessão.');
