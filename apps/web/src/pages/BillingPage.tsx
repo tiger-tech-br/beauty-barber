@@ -88,7 +88,7 @@ export function BillingPage() {
       <section aria-labelledby="billing-plans-title" className="billing-section"><div className="billing-section__title"><p className="eyebrow">COBRANÇA RECORRENTE</p><h2 id="billing-plans-title">Escolha sua frequência</h2></div>
         <div className="billing-grid">{data?.plans.map((plan) => <article key={plan.cycle} className="billing-plan">
           <span className="billing-plan__type">{cycleName(plan.cycle).toUpperCase()}</span>
-          <h3>{plan.cycle === 'monthly' ? 'Flexibilidade mês a mês.' : 'Planejamento para o ano.'}</h3>
+          <h3>{plan.cycle === 'monthly' ? 'Cobrança mensal' : 'Cobrança anual'}</h3>
           <p>{plan.cycle === 'monthly' ? 'Pagamento recorrente com frequência mensal.' : 'Pagamento recorrente com frequência anual.'}</p>
           <p className="billing-plan__note">O preço e as condições finais são exibidos no checkout do PagBank.</p>
           <button type="button" className="button button--primary" disabled={checkingOut !== null} onClick={() => void checkout(plan.cycle)}>

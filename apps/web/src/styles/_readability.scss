@@ -1,0 +1,88 @@
+// Leitura confortável no desktop, no navegador móvel e na WebView do Android.
+// Mantém títulos maiores, rótulos úteis visíveis e campos com pelo menos 16 px.
+.dashboard-layout { font-size: 16px; }
+.dashboard-layout :is(.dashboard-sidebar__link, .dashboard-sidebar__active) { font-size: 14px; line-height: 1.4; }
+.dashboard-layout :is(.dashboard-sidebar__navigation p, .dashboard-sidebar__brand > span, .dashboard-sidebar__disabled) { font-size: 14px; }
+.dashboard-layout .dashboard-sidebar__bottom strong { font-size: 14px; }
+.dashboard-layout .dashboard-sidebar__bottom small { font-size: 14px; }
+.dashboard-layout :is(.dashboard-topbar__label, .dashboard-business-select, .text-button, .theme-switch) { font-size: 14px; }
+.dashboard-layout :is(.dashboard-heading p:last-child, .management-heading p:last-child, .management-hint, .settings-description, .billing-warning, .billing-status p:last-child, .billing-section__title > p:last-child, .report-empty, .empty-records p, .calendar-placeholder, .calendar-empty-column, .dashboard-upcoming__empty, .history-panel__heading span, .history-pagination span) { font-size: 15px; line-height: 1.55; }
+.dashboard-layout :is(.eyebrow, .dashboard-place span, .setup-label, .step-count) { font-size: 14px; letter-spacing: .05em; }
+.dashboard-layout :is(.dashboard-place strong, .setup-step strong, .management-toolbar strong, .calendar-column h3, .calendar-appointment strong, .calendar-list__item strong) { font-size: 15px; }
+.dashboard-layout :is(.setup-step small, .setup-step__status, .operations__grid article small, .dashboard-summary small, .record-table__primary small, .management-toolbar small, .calendar-column h3 span, .calendar-appointment small, .calendar-appointment time, .calendar-list__item small, .calendar-list__item time, .dashboard-footer, .report-money small, .platform-metrics article span) { font-size: 14px; }
+.dashboard-layout :is(.setup-panel__side p, .operations__grid article span, .operations__heading > span, .block-list__item strong, .block-list__item small, .report-metrics article span, .report-money span, .billing-plan p, .billing-plan__note, .billing-empty) { font-size: 14px; line-height: 1.55; }
+.dashboard-layout :is(.record-table th, .status-pill, .billing-plan__type) { font-size: 14px; letter-spacing: .02em; }
+.dashboard-layout :is(.record-table td, .record-link, .calendar-appointment span, .calendar-list__item span, .calendar-detail p, .calendar-history li, .billing-verification label, .report-filters label, .settings-invite label, .settings-invite-link label) { font-size: 14px; }
+.dashboard-layout :is(.management-form label, .hours-row label, .calendar-toolbar input, .calendar-toolbar select, .settings-select, .calendar-nav, .calendar-today, .calendar-view button, .service-select legend, .service-select p, .hours-form > p, .form-success) { font-size: 14px; }
+.dashboard-layout :is(.management-form input, .management-form select, .management-form textarea, .hours-form input, .hours-form select, .dashboard-business-select, .search-field input, .report-filters input, .calendar-toolbar input, .calendar-toolbar select, .settings-invite input, .settings-invite select, .settings-invite-link input, .billing-verification input, .billing-verification select, .settings-select) { font-size: 16px; }
+.dashboard-layout :is(.button, .record-link) { font-size: 14px; }
+.dashboard-layout .settings-invite-link,
+.dashboard-layout .management-panel,
+.dashboard-layout .management-editor,
+.dashboard-layout .report-tables,
+.dashboard-layout .dashboard-summary,
+.dashboard-layout .dashboard-content { min-width: 0; max-width: 100%; }
+
+.auth-layout :is(.auth-description, .auth-switch, .auth-pending, .back-link, .auth-legal) { font-size: 15px; }
+.auth-layout .auth-form label { font-size: 15px; }
+.auth-layout .auth-form input { font-size: 16px; }
+.public-booking :is(.public-booking__panel p, .public-booking__step label, .public-booking__slots small, .public-booking__privacy, .public-booking__footer) { font-size: 15px; }
+.public-booking .public-booking__step :is(input:not([type='radio']), select) { font-size: 16px; }
+.landing :is(.site-nav, .hero__note, .section-heading > p, .feature p, .development-note, .audience-card__body p, .hero__photo-caption, .landing-plans__grid p, .landing-plans__disclaimer) { font-size: 15px; line-height: 1.55; }
+.landing :is(.landing-intro__inner > span, .feature__number, .audience-card__body > span, .eyebrow) { font-size: 14px; letter-spacing: .06em; }
+.landing .hero__note { letter-spacing: 0; }
+.landing .site-footer__inner small { font-size: 14px; }
+
+// A tabela continua semântica, mas vira uma lista de cartões quando falta espaço.
+// Container query considera a largura REAL da tabela, inclusive em colunas laterais.
+.record-table-wrap { overflow: visible; }
+.record-table { table-layout: auto; }
+.record-table td { overflow-wrap: anywhere; }
+.record-table__primary small { max-width: none; white-space: normal; overflow: visible; text-overflow: clip; }
+
+@container (max-width: 1180px) {
+  .record-table { display: block; width: 100%; min-width: 0; border-collapse: separate; }
+  .record-table thead { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  .record-table tbody { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 12px; }
+  .record-table tbody tr { display: block; min-width: 0; border: 1px solid #dce2dc; border-radius: 10px; padding: 8px 14px; background: #fff; }
+  .record-table tbody td { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 7px 16px; text-align: right; min-width: 0; width: 100%; padding: 12px 0; border-top: 0; border-bottom: 1px solid #e5e8e3; }
+  .record-table tbody td:last-child { border-bottom: 0; }
+  .record-table tbody td:empty { display: none; }
+  .record-table tbody td::before { content: attr(data-label); flex: 0 0 auto; color: #586763; font-size: 14px; font-weight: 750; text-align: left; }
+  .record-table tbody td .table-actions { margin-left: auto; justify-content: flex-end; }
+  .record-table tbody td .settings-select { max-width: 190px; }
+  .record-table tbody td > :is(span, strong, button, select) { max-width: 100%; }
+  .dashboard-layout[data-theme='dark'] .record-table tbody tr { background: #1b2321; border-color: #3a4942; }
+  .dashboard-layout[data-theme='dark'] .record-table tbody td { border-color: #39463f; }
+  .dashboard-layout[data-theme='dark'] .record-table tbody td::before { color: #c6d4cb; }
+}
+
+// Fallback para WebViews que ainda não suportem container queries.
+@supports not (container-type: inline-size) {
+  @media (max-width: 1250px) {
+    .record-table-wrap { overflow-x: visible; }
+    .record-table { display: block; min-width: 0; width: 100%; }
+    .record-table thead { display: none; }
+    .record-table tbody { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 12px; }
+    .record-table tbody tr { display: block; min-width: 0; padding: 12px; border: 1px solid #dce2dc; background: #fff; }
+    .record-table tbody td { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; width: 100%; min-width: 0; padding: 10px 0; border-top: 0; }
+    .record-table tbody td::before { content: attr(data-label); font-size: 14px; font-weight: 700; }
+    .dashboard-layout[data-theme='dark'] .record-table tbody tr { background: #1b2321; border-color: #3a4942; }
+    .dashboard-layout[data-theme='dark'] .record-table tbody td::before { color: #c6d4cb; }
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-layout .dashboard-sidebar__navigation { gap: 7px; }
+  .dashboard-layout :is(.dashboard-sidebar__link, .dashboard-sidebar__active) { font-size: 14px; padding: 10px 12px; }
+  .dashboard-layout .dashboard-topbar { min-height: 70px; height: auto; padding-block: 10px; gap: 12px; }
+  .dashboard-layout .dashboard-topbar__actions { flex-shrink: 0; }
+  .dashboard-layout .dashboard-topbar__label { min-width: 0; overflow-wrap: anywhere; font-size: 13px; }
+  .dashboard-layout .dashboard-heading { margin-bottom: 24px; }
+  .dashboard-layout .dashboard-create-booking { white-space: normal; }
+  .dashboard-layout :is(.management-editor, .report-filters, .billing-plan, .billing-verification) { padding: 18px; }
+  .dashboard-layout .management-form__actions { justify-content: stretch; }
+  .dashboard-layout .management-form__actions .button { flex: 1 1 140px; }
+  .dashboard-layout .platform-metrics { grid-template-columns: 1fr; }
+  .auth-layout .auth-form-panel { padding-inline: 20px; }
+}

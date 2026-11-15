@@ -13,7 +13,7 @@
 .empty-records { padding: 65px 20px; text-align: center; }
 .empty-records strong { font: 400 27px $serif; }
 .empty-records p { font-size: 13px; color: $muted; line-height: 1.7; }
-.record-table-wrap { width: 100%; overflow-x: auto; }
+.record-table-wrap { width: 100%; max-width: 100%; container-type: inline-size; }
 .record-table { width: 100%; border-collapse: collapse; text-align: left; }
 .record-table th { font-size: 10px; font-weight: 750; color: #8b9693; letter-spacing: .065em; background: #fbfcf9; padding: 16px 22px; white-space: nowrap; }
 .record-table td { font-size: 12px; color: #4b5a5b; padding: 19px 22px; border-top: 1px solid $border; min-width: 100px; }
@@ -61,7 +61,7 @@
   .search-field, .search-field input { width: 100%; }
   .management-editor { padding: 20px; }
   .management-form { grid-template-columns: 1fr; }
-  .record-table { min-width: 600px; }
+  .record-table { min-width: 0; }
   .hours-row { grid-template-columns: 1fr 1fr; }
   .hours-row label:first-child { grid-column: 1 / -1; }
 }

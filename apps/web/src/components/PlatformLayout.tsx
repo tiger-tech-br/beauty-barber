@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { usePanelTheme } from '../hooks/usePanelTheme';
+import { useResponsiveTables } from '../hooks/useResponsiveTables';
 import { apiRequest, type UserAccount } from '../lib/api';
 import { Logo } from './Logo';
 import { ThemeSwitch } from './ThemeSwitch';
@@ -13,6 +14,7 @@ const platformLinks = [
 export function PlatformLayout({ account, children }: { account: UserAccount; children: ReactNode }) {
   const navigate = useNavigate();
   const { theme, toggleTheme } = usePanelTheme();
+  const tableContentRef = useResponsiveTables();
   const [loggingOut, setLoggingOut] = useState(false);
   const [error, setError] = useState('');
 
@@ -39,7 +41,7 @@ export function PlatformLayout({ account, children }: { account: UserAccount; ch
     </aside>
     <main className="dashboard-main">
       <header className="dashboard-topbar"><div className="dashboard-topbar__label"><span className="platform-security-mark" aria-hidden="true">◆</span> Acesso exclusivo do administrador</div><div className="dashboard-topbar__actions"><ThemeSwitch theme={theme} onToggle={toggleTheme} /><button className="text-button" type="button" onClick={logout} disabled={loggingOut}>{loggingOut ? 'Saindo…' : 'Sair da conta'} <span aria-hidden="true">↗</span></button></div></header>
-      <div className="dashboard-content">{error && <p className="form-error" role="alert">{error}</p>}{children}<footer className="dashboard-footer">BeautyBarber · Administração da plataforma · Acesso restrito.</footer></div>
+      <div className="dashboard-content" ref={tableContentRef}>{error && <p className="form-error" role="alert">{error}</p>}{children}<footer className="dashboard-footer">BeautyBarber · Administração da plataforma · Acesso restrito.</footer></div>
     </main>
   </div>;
 }

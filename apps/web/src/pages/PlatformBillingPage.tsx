@@ -67,7 +67,7 @@ export function PlatformBillingPage() {
       {notice && <p className="form-success" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}
       <div className={`platform-review-layout ${selected ? 'platform-review-layout--selected' : ''}`}>
       <section className="management-panel"><div className="management-toolbar"><strong>{items.length} solicitação(ões) pendente(s)</strong></div>
-        {!items.length ? <div className="empty-records"><strong>Tudo conferido por enquanto.</strong><p>Nenhuma solicitação aguarda revisão.</p></div> : <div className="record-table-wrap"><table className="record-table"><thead><tr><th>Estabelecimento</th><th>Plano</th><th>E-mail informado</th><th>Enviada em</th><th><span className="sr-only">Ações</span></th></tr></thead><tbody>{items.map((item) => <tr key={item.id}>
+        {!items.length ? <div className="empty-records"><strong>Nenhuma solicitação pendente.</strong><p>Solicitações de conferência de assinatura aparecerão aqui.</p></div> : <div className="record-table-wrap"><table className="record-table"><thead><tr><th>Estabelecimento</th><th>Plano</th><th>E-mail informado</th><th>Enviada em</th><th><span className="sr-only">Ações</span></th></tr></thead><tbody>{items.map((item) => <tr key={item.id}>
           <td className="record-table__primary">{item.establishmentName}</td><td>{item.billingCycle === 'monthly' ? 'Mensal' : 'Anual'}</td><td>{item.billingEmail}</td><td>{new Date(item.createdAt).toLocaleDateString('pt-BR')}</td>
           <td><button className="record-link" type="button" onClick={() => select(item)}>Conferir</button></td>
         </tr>)}</tbody></table></div>}

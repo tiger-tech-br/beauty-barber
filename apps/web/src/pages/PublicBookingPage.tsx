@@ -76,7 +76,7 @@ export function PublicBookingPage() {
     <main className="public-booking__main">
       {error && <p className="form-error" role="alert">{error}</p>}
       {!data ? <div className="public-booking__panel"><h1>Estabelecimento indisponível.</h1><p>Confira o endereço do link com o estabelecimento.</p></div> : <>
-        <p className="eyebrow">AGENDAMENTO ONLINE</p><h1>Seu próximo horário, com tranquilidade.</h1>
+        <p className="eyebrow">AGENDAMENTO ONLINE</p><h1>Agendar atendimento</h1>
         {data.establishment.hasLogo && <img className="public-booking__business-logo" src={`/api/branding/${encodeURIComponent(data.establishment.slug)}/logo`} alt={`Logotipo de ${data.establishment.name}`} />}
         <p className="public-booking__intro">{data.establishment.name}</p>
         {sent ? <section className="public-booking__panel" role="status"><h2>Confira seu e-mail</h2><p>Enviamos um link de confirmação para <strong>{email}</strong>. Ele expira em 20 minutos. O horário ainda não está reservado; clique no link assim que recebê-lo.</p></section>

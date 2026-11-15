@@ -24,9 +24,9 @@ export function SignUp() {
     } finally { setLoading(false); }
   }
 
-  return <AuthLayout title="Vamos organizar seu espaço." description="Comece criando sua conta e o perfil do seu estabelecimento.">
+  return <AuthLayout title="Cadastrar estabelecimento" description="Informe os dados do responsável e do salão ou barbearia.">
     <form className="auth-form" onSubmit={submit}>
-      <label htmlFor="register-name">Seu nome</label><input id="register-name" type="text" autoComplete="name" required minLength={2} maxLength={120} value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Como podemos chamar você?" />
+      <label htmlFor="register-name">Nome completo</label><input id="register-name" type="text" autoComplete="name" required minLength={2} maxLength={120} value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Nome e sobrenome" />
       <label htmlFor="register-establishment">Nome do estabelecimento</label><input id="register-establishment" type="text" required minLength={2} maxLength={160} value={establishmentName} onChange={(e) => setEstablishmentName(e.target.value)} placeholder="Ex.: Salão Aurora" />
       <label htmlFor="register-email">E-mail</label><input id="register-email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seuemail@exemplo.com" />
       <label htmlFor="register-password">Senha <span className="label-hint">(mínimo 12 caracteres)</span></label><input id="register-password" type="password" autoComplete="new-password" required minLength={12} maxLength={128} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Crie uma senha segura" />

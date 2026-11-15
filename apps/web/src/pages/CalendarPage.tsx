@@ -185,7 +185,7 @@ export function CalendarPage() {
   if (!account) return <div className="page-state" role="alert">{accountError || 'Entre na conta para continuar.'}</div>;
 
   return <WorkspaceLayout account={account}>
-    <header className="management-heading"><div><p className="eyebrow">GESTÃO / AGENDA</p><h1>Agenda de atendimentos</h1><p>Horários, equipe e clientes organizados no mesmo lugar.</p></div>
+    <header className="management-heading"><div><p className="eyebrow">GESTÃO / AGENDA</p><h1>Agenda de atendimentos</h1><p>Consulte horários disponíveis e registre agendamentos.</p></div>
       {account.role !== 'professional' && <button className="button button--primary" onClick={() => openEditor()} type="button">Novo agendamento +</button>}
     </header>
     {account.role === 'professional' ? <p className="form-error">A agenda administrativa está disponível somente para responsáveis e recepção.</p> : <>
