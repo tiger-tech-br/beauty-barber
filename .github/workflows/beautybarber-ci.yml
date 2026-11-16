@@ -49,6 +49,28 @@ jobs:
         run: npm test
       - name: Executar integracao multiempresa no PostgreSQL
         run: timeout --signal=TERM --kill-after=10s 150s npm run test:integration -w @studio/api
+      - name: Testar backup e restauração no PostgreSQL temporário
+        env:
+          PG_SERVICE_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          set -euo pipefail
+          dump_file="$RUNNER_TEMP/beautybarber-ci.dump"
+          test -n "$PG_SERVICE_CONTAINER"
+          docker exec "$PG_SERVICE_CONTAINER" pg_dump --format=custom --no-owner --no-privileges -U beautybarber_ci beautybarber_test > "$dump_file"
+          test -s "$dump_file"
+          docker exec "$PG_SERVICE_CONTAINER" pg_restore --list < "$dump_file" > /dev/null
+          docker exec "$PG_SERVICE_CONTAINER" createdb -U beautybarber_ci beautybarber_restore_test
+          docker cp "$dump_file" "$PG_SERVICE_CONTAINER:/tmp/beautybarber-ci.dump"
+          docker exec "$PG_SERVICE_CONTAINER" pg_restore --exit-on-error -U beautybarber_ci -d beautybarber_restore_test /tmp/beautybarber-ci.dump
+          original="$(docker exec "$PG_SERVICE_CONTAINER" psql -U beautybarber_ci -d beautybarber_test -tAc 'SELECT count(*) FROM public.schema_migrations')"
+          restored="$(docker exec "$PG_SERVICE_CONTAINER" psql -U beautybarber_ci -d beautybarber_restore_test -tAc 'SELECT count(*) FROM public.schema_migrations')"
+          test "$original" -gt 0
+          test "$restored" = "$original"
+          original_tables="$(docker exec "$PG_SERVICE_CONTAINER" psql -U beautybarber_ci -d beautybarber_test -tAc "SELECT count(*) FROM pg_tables WHERE schemaname='public'")"
+          restored_tables="$(docker exec "$PG_SERVICE_CONTAINER" psql -U beautybarber_ci -d beautybarber_restore_test -tAc "SELECT count(*) FROM pg_tables WHERE schemaname='public'")"
+          test "$original_tables" -gt 1
+          test "$restored_tables" = "$original_tables"
+          echo "Backup/restauração validados no banco temporário: $restored migrações e $restored_tables tabelas."
       - name: Compilar API e frontend
         run: npm run build
 
