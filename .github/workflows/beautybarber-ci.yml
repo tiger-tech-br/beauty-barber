@@ -58,7 +58,7 @@ jobs:
           test -n "$PG_SERVICE_CONTAINER"
           docker exec "$PG_SERVICE_CONTAINER" pg_dump --format=custom --no-owner --no-privileges -U beautybarber_ci beautybarber_test > "$dump_file"
           test -s "$dump_file"
-          docker exec "$PG_SERVICE_CONTAINER" pg_restore --list < "$dump_file" > /dev/null
+          docker exec -i "$PG_SERVICE_CONTAINER" pg_restore --list < "$dump_file" > /dev/null
           docker exec "$PG_SERVICE_CONTAINER" createdb -U beautybarber_ci beautybarber_restore_test
           docker cp "$dump_file" "$PG_SERVICE_CONTAINER:/tmp/beautybarber-ci.dump"
           docker exec "$PG_SERVICE_CONTAINER" pg_restore --exit-on-error -U beautybarber_ci -d beautybarber_restore_test /tmp/beautybarber-ci.dump
