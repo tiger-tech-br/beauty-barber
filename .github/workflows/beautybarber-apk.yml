@@ -1,6 +1,11 @@
 name: BeautyBarber APK debug
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'android-beautybarber/**'
+      - '.github/workflows/beautybarber-apk.yml'
   workflow_dispatch:
     inputs:
       website_url:
@@ -13,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      BEAUTYBARBER_URL: ${{ github.event_name == 'workflow_dispatch' && inputs.website_url || 'https://beautybarber.tigertech.dev.br' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -21,8 +28,6 @@ jobs:
           java-version: '21'
       - uses: android-actions/setup-android@v3
       - name: Verificar URL segura do BeautyBarber
-        env:
-          BEAUTYBARBER_URL: ${{ inputs.website_url }}
         run: |
           if [[ ! "$BEAUTYBARBER_URL" =~ ^https://[A-Za-z0-9.-]+$ ]]; then
             echo 'Informe apenas a origem HTTPS, sem porta, caminho ou parâmetros.' >&2
@@ -35,12 +40,15 @@ jobs:
           gradle-version: '8.13'
       - name: Compilar APK de desenvolvimento
         working-directory: android-beautybarber
-        env:
-          BEAUTYBARBER_URL: ${{ inputs.website_url }}
         run: gradle :app:assembleDebug "-PbeautybarberUrl=${BEAUTYBARBER_URL}"
+      - name: Gerar hash SHA-256 do APK
+        working-directory: android-beautybarber
+        run: sha256sum app/build/outputs/apk/debug/app-debug.apk > app/build/outputs/apk/debug/app-debug.apk.sha256
       - uses: actions/upload-artifact@v4
         with:
           name: beautybarber-apk-debug
-          path: android-beautybarber/app/build/outputs/apk/debug/app-debug.apk
+          path: |
+            android-beautybarber/app/build/outputs/apk/debug/app-debug.apk
+            android-beautybarber/app/build/outputs/apk/debug/app-debug.apk.sha256
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 14

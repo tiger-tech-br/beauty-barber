@@ -23,7 +23,20 @@ O aplicativo Android do BeautyBarber fica em `android-beautybarber/` e abre o **
 
 O build de debug é **assinado automaticamente com a chave de desenvolvimento Android**. Para distribuir comercialmente, gere e guarde seu próprio keystore de release, configure a assinatura na máquina de publicação e gere um APK/AAB de release. **Não inclua o keystore nem senhas no Git ou no ZIP.**
 
-Se o Gradle não estiver instalado no terminal, o projeto pode ser compilado pelo Android Studio após configurar a propriedade Gradle na sua máquina. É possível ainda utilizar o fluxo manual GitHub Actions em `.github/workflows/beautybarber-apk.yml` (após subir o código para um repositório privado), informando o subdomínio HTTPS final.
+Se o Gradle não estiver instalado no terminal, o projeto pode ser compilado pelo Android Studio após configurar o Gradle na sua máquina.
+
+## APK de teste pelo GitHub Actions
+
+O repositório `tiger-tech-br/beauty-barber` compila automaticamente um **APK de desenvolvimento** quando o projeto Android ou seu workflow mudam na branch `main`. Também é possível iniciar uma execução manual em **Actions → BeautyBarber APK debug → Run workflow**, informando a origem HTTPS.
+
+Depois de uma execução bem-sucedida:
+
+1. Abra **Actions → BeautyBarber APK debug** e escolha a execução concluída.
+2. Na seção **Artifacts**, baixe `beautybarber-apk-debug`.
+3. Extraia o ZIP. Nele estarão `app-debug.apk` e `app-debug.apk.sha256`, que permite conferir o hash do arquivo.
+4. Esse APK utiliza `https://beautybarber.tigertech.dev.br` como destino padrão. **A compilação pode passar mesmo que o site ainda não esteja publicado.** Nesse caso, o aplicativo exibirá erro de conexão; não distribua nem venda o APK até validar DNS, HTTPS, login e agendamento no celular real.
+
+O artefato fica disponível no GitHub por **14 dias**. É um build de teste assinado com chave de desenvolvimento, não um lançamento comercial. O APK definitivo exigirá keystore privada de release e testes reais.
 
 ## Segurança
 
