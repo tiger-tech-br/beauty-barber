@@ -109,7 +109,7 @@ npm run test:integration -w @studio/api
 
 O teste de integração se recusa a executar se o nome do banco não terminar em `_test`. Ele cria duas empresas temporárias, testa isolamento, CSRF, concorrência de agenda, bloqueios, histórico de clientes, agenda individual do profissional e exceções de funcionamento por data. **Nunca use dados reais de clientes no banco de testes.**
 
-O arquivo `.github/workflows/beautybarber-ci.yml` executa esse mesmo roteiro automaticamente em um PostgreSQL **temporário e descartável** do GitHub Actions quando o código for enviado a um repositório GitHub. Ele não acessa a Hostinger nem o PetCore e não precisa das credenciais do servidor. **O fluxo foi preparado, mas ainda não foi executado no GitHub neste ambiente.**
+O arquivo `.github/workflows/beautybarber-ci.yml` executa esse mesmo roteiro automaticamente em um PostgreSQL **temporário e descartável** do GitHub Actions quando o código for enviado a um repositório GitHub. Ele não acessa a Hostinger nem o PetCore e não precisa das credenciais do servidor. **O fluxo passou no GitHub Actions em 16/11/2026**, incluindo integração multiempresa e backup/restauração em PostgreSQL temporário ([execução](https://github.com/tiger-tech-br/beauty-barber/actions/runs/43966025373)). Isso não substitui testes na VPS de produção.
 
 ## Princípios de segurança
 
