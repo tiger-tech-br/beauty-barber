@@ -93,6 +93,8 @@
   .site-footer__inner { padding-block: 35px; flex-wrap: wrap; }
 }
 @media (max-width: 420px) {
+  .site-header .logo-word { font-size: 19px; }
+  .site-header .logo-mark { width: 32px; height: 32px; }
   .hero h1 { font-size: 46px; }
   .hero__photo { min-height: 290px; }
   .hero__art { min-height: 320px; }

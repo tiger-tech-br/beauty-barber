@@ -1,4 +1,4 @@
-# Revisão técnica e de segurança — BeautyBarber
+# Revisão técnica e de segurança — Beauty Barber Studio
 
 Última revisão de código: 15/11/2026; verificações automatizadas atualizadas em 16/11/2026. Escopo: frontend React, API Express, migrações PostgreSQL, Docker Compose e projeto Android. **Esta revisão de código não equivale a pentest nem garante ausência de falhas.**
 
@@ -33,7 +33,7 @@
 ## Bloqueios objetivos para liberar o SaaS comercialmente
 
 1. **Testes em ambiente real:** no GitHub, as treze migrations, a integração multiempresa e o backup/restauração passaram em um banco descartável. Ainda é necessário repetir testes em um ambiente de homologação semelhante à VPS, inclusive exportações completa e individual, horários especiais, isolamento dos logotipos, rollback e restauração de backups externos. Nunca utilizar PetCore nem produção nesses testes.
-2. Implantar o BeautyBarber na VPS em projeto Docker separado; configurar subdomínio e proxy HTTPS existente **sem sobrescrever** PetCore. Verificar CORS/Origin real, cookies, cabeçalhos e limites de requisições.
+2. Implantar o Beauty Barber Studio na VPS em projeto Docker separado; configurar subdomínio e proxy HTTPS existente **sem sobrescrever** PetCore. Verificar CORS/Origin real, cookies, cabeçalhos e limites de requisições.
 3. Configurar Resend, DNS e domínio remetente; testar convites, recuperação de senha, confirmação e cancelamento público.
 4. Definir preços, regra de teste grátis (se houver), inadimplência, limites por plano, reembolso e suporte. Validar os dois links recorrentes no PagBank. Integração automática exige documentação/API e eventos de cobrança autenticados, ausentes nesta versão.
 5. Implementar e validar políticas LGPD (finalidade, retenção, acesso individual, exclusão/anônimização), termos e privacidade. A exportação de um cliente específico foi adicionada ao painel do responsável, mas depende de verificação manual da identidade e ainda não cria um canal automatizado de solicitação. Não realizar exclusões irreversíveis sem política do responsável.

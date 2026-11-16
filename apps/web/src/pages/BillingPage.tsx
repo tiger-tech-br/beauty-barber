@@ -73,7 +73,7 @@ export function BillingPage() {
   if (!account) return <div className="page-state" role="alert">{accountError || 'Entre na conta para continuar.'}</div>;
 
   return <WorkspaceLayout account={account}>
-    <header className="management-heading"><div><p className="eyebrow">CONTA / ASSINATURA</p><h1>Seu plano BeautyBarber</h1><p>Escolha a recorrência e acompanhe a conferência do pagamento.</p></div></header>
+    <header className="management-heading"><div><p className="eyebrow">CONTA / ASSINATURA</p><h1>Seu plano Beauty Barber Studio</h1><p>Escolha a recorrência e acompanhe a conferência do pagamento.</p></div></header>
     {error && <p role="alert" className="form-error">{error}</p>}
     {notice && <p role="status" className="form-success">{notice}</p>}
     {account.role !== 'owner' ? <p className="form-error">Somente o responsável pode gerenciar a assinatura.</p> : <>

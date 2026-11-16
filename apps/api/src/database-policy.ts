@@ -11,7 +11,7 @@ export function beautyBarberDatabaseName(connectionString: string, production: b
   const database = decodeURIComponent(url.pathname.slice(1));
   const valid = production ? database === 'beautybarber' : /^beautybarber(?:_test|_staging)?$/.test(database);
   if (!valid) {
-    throw new Error(`BLOQUEADO: BeautyBarber não pode utilizar o banco '${database || '(vazio)'}'. ` +
+    throw new Error(`BLOQUEADO: Beauty Barber Studio não pode utilizar o banco '${database || '(vazio)'}'. ` +
       (production ? 'Em produção, use apenas beautybarber.' : 'Use beautybarber, beautybarber_test ou beautybarber_staging.'));
   }
   return database;

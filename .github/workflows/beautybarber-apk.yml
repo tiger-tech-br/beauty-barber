@@ -1,4 +1,4 @@
-name: BeautyBarber APK debug
+name: Beauty Barber Studio APK debug
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       website_url:
-        description: 'Origem HTTPS pública do BeautyBarber (sem barra final)'
+        description: 'Origem HTTPS pública do Beauty Barber Studio (sem barra final)'
         required: true
         type: string
 
@@ -29,7 +29,7 @@ jobs:
       - uses: android-actions/setup-android@v4
         with:
           packages: ''
-      - name: Verificar URL segura do BeautyBarber
+      - name: Verificar URL segura do Beauty Barber Studio
         run: |
           if [[ ! "$BEAUTYBARBER_URL" =~ ^https://[A-Za-z0-9.-]+$ ]]; then
             echo 'Informe apenas a origem HTTPS, sem porta, caminho ou parâmetros.' >&2

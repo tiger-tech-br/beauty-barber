@@ -1,13 +1,13 @@
-# BeautyBarber — SaaS para salões de beleza e barbearias
+# Beauty Barber Studio — SaaS para salões de beleza e barbearias
 
-Produto comercial multiempresa **BeautyBarber**. Identidade visual aprovada: verde-petróleo `#244B50`, terracota `#B8795C`, fundo claro `#F7F6F3`, texto `#20262D` e superfícies brancas. O nome técnico da pasta e dos pacotes ainda é `studio-saas` para preservar os comandos de desenvolvimento já configurados.
+Produto comercial multiempresa **Beauty Barber Studio**. Identidade visual aprovada: verde-petróleo `#244B50`, terracota `#B8795C`, fundo claro `#F7F6F3`, texto `#20262D` e superfícies brancas. O nome técnico da pasta e dos pacotes ainda é `studio-saas` para preservar os comandos de desenvolvimento já configurados.
 
 ## Tecnologias
 
 - React, TypeScript, Vite, React Router e SCSS no Front-end.
 - Node.js, Express, TypeScript e PostgreSQL na API.
 - Sessões próprias, com cookies HttpOnly e token persistido somente como hash no banco.
-- Docker Compose + Caddy + PostgreSQL exclusivo do BeautyBarber para compartilhar a **Hostinger VPS** com o PetCore, sem compartilhar dados, volumes ou portas públicas.
+- Docker Compose + Caddy + PostgreSQL exclusivo do Beauty Barber Studio para compartilhar a **Hostinger VPS** com o PetCore, sem compartilhar dados, volumes ou portas públicas.
 - Resend opcional para confirmação de agendamentos e recuperação de senha; sem configuração, os pedidos públicos ficam desabilitados.
 
 ## Requisitos
@@ -43,16 +43,16 @@ npm run dev:web
 
 Visite `http://localhost:5173`. A API atende em `http://localhost:3001/api/health`.
 
-**Na VPS compartilhada com o PetCore:** ajuste `DATABASE_URL` para o PostgreSQL privado do BeautyBarber (`postgresql://beautybarber_app:senha@db:5432/beautybarber`) e `WEB_ORIGIN` para o subdomínio **aprovado** `https://beautybarber.tigertech.dev.br` (ainda sem DNS/HTTPS/deploy verificados). O `compose.yaml` usa projeto Docker, rede, usuário, banco, cookie e volumes exclusivos. Por segurança, o Caddy do BeautyBarber atende somente em `127.0.0.1:18080`, sem disputar as portas públicas 80/443 do PetCore. Antes do deploy, será necessário inspecionar o proxy existente para conectar o subdomínio. **Leia `docs/DEPLOY-HOSTINGER.md` antes de qualquer comando na VPS.**
+**Na VPS compartilhada com o PetCore:** ajuste `DATABASE_URL` para o PostgreSQL privado do Beauty Barber Studio (`postgresql://beautybarber_app:senha@db:5432/beautybarber`) e `WEB_ORIGIN` para o subdomínio **aprovado** `https://beautybarber.tigertech.dev.br` (ainda sem DNS/HTTPS/deploy verificados). O `compose.yaml` usa projeto Docker, rede, usuário, banco, cookie e volumes exclusivos. Por segurança, o Caddy do Beauty Barber Studio atende somente em `127.0.0.1:18080`, sem disputar as portas públicas 80/443 do PetCore. Antes do deploy, será necessário inspecionar o proxy existente para conectar o subdomínio. **Leia `docs/DEPLOY-HOSTINGER.md` antes de qualquer comando na VPS.**
 
 Para habilitar e-mail, crie uma conta Resend, configure e verifique o domínio remetente e preencha `RESEND_API_KEY` e `RESEND_FROM` no `.env`. **Nunca** envie sua chave para o frontend ou para o repositório.
 
 ## Módulos implementados no código
 
-- Landing e identidade **BeautyBarber** com logotipo escolhido (opção 02), imagens próprias de salão, barbearia, login e hero.
+- Landing e identidade **Beauty Barber Studio** com logotipo escolhido (opção 02), imagens próprias de salão, barbearia, login e hero.
 - Favicon nas abas do navegador e ícone Android com a marca 02. Projeto nativo Android para APK em `android-beautybarber/` (compilação depende da origem HTTPS e do Android SDK; consulte `docs/ANDROID-APK.md`).
 - Cadastro de empresa, login/logout, sessões HttpOnly, recuperação de senha por e-mail, convites para equipe, permissões e troca de empresa quando um usuário participa de mais de uma.
-- Identidade própria de cada estabelecimento: o responsável pode enviar ou remover seu logotipo PNG (máximo de 256 KB e 1024 × 1024 pixels) em **Configurações**; a página pública de agendamento mostra a marca do salão, sem substituir o logotipo oficial do BeautyBarber. A imagem fica guardada no banco do **BeautyBarber**, isolada por estabelecimento e coberta pelos mesmos backups do PostgreSQL.
+- Identidade própria de cada estabelecimento: o responsável pode enviar ou remover seu logotipo PNG (máximo de 256 KB e 1024 × 1024 pixels) em **Configurações**; a página pública de agendamento mostra a marca do salão, sem substituir o logotipo oficial do Beauty Barber Studio. A imagem fica guardada no banco do **Beauty Barber Studio**, isolada por estabelecimento e coberta pelos mesmos backups do PostgreSQL.
 - Cadastro de serviços, profissionais e clientes; associação de serviços e turnos/intervalos por profissional. **O estabelecimento escolhe e pode editar seus próprios horários em Configurações**, inclusive abrir/fechar mais cedo e optar por domingos. Também pode cadastrar **horários especiais por data** (feriados, fechamento antecipado, abertura extraordinária) e restaurar o horário semanal sem alterar os outros dias. A agenda disponibiliza apenas a interseção entre o funcionamento do salão e o expediente do profissional. Sem horários cadastrados para o salão, não há vagas disponíveis. Mudanças que afetem agendamentos futuros são recusadas até remarcar ou cancelar os atendimentos. Registro e remoção de folgas/bloqueios, com validação contra atendimentos existentes.
 - Histórico de atendimentos por cliente; vinculação da conta de usuário ao cadastro profissional pelo responsável e **agenda pessoal somente para leitura** no perfil Profissional.
 - Agenda interna diária, semanal e mensal; disponibilidade por duração, expediente e bloqueios; agendamento, alteração de status, remarcação e histórico. O banco impede conflitos concorrentes para o mesmo profissional.
@@ -71,7 +71,7 @@ Links recorrentes fornecidos pelo proprietário:
 - Mensal: `https://pag.ae/82miujJ7H`
 - Anual: `https://pag.ae/82miv8vhM`
 
-O checkout é externo. Estes links **não** fornecem ao BeautyBarber, por si só, dados suficientes para associar automaticamente o pagamento a uma empresa. A ativação implementada é **manual**, após a conferência no painel oficial do PagBank. Não existem webhooks de cobrança integrados. Existe controle opcional por `SUBSCRIPTION_ENFORCEMENT=true`, que bloqueia novas alterações operacionais e agendamentos públicos de empresas sem assinatura confirmada e vigente, mas permite consultas, acesso à conta, cobrança e cancelamento público de compromissos existentes. **A opção vem desativada por padrão**. A escolha de preços, regras de teste e limites por plano ainda precisa ser formalizada antes de ativá-la e comercializar.
+O checkout é externo. Estes links **não** fornecem ao Beauty Barber Studio, por si só, dados suficientes para associar automaticamente o pagamento a uma empresa. A ativação implementada é **manual**, após a conferência no painel oficial do PagBank. Não existem webhooks de cobrança integrados. Existe controle opcional por `SUBSCRIPTION_ENFORCEMENT=true`, que bloqueia novas alterações operacionais e agendamentos públicos de empresas sem assinatura confirmada e vigente, mas permite consultas, acesso à conta, cobrança e cancelamento público de compromissos existentes. **A opção vem desativada por padrão**. A escolha de preços, regras de teste e limites por plano ainda precisa ser formalizada antes de ativá-la e comercializar.
 
 Para habilitar o responsável pelo painel global, somente um operador confiável com acesso ao banco deve definir `users.is_platform_admin = true` para a conta indicada. Nunca ofereça esse campo no cadastro público. O administrador poderá então abrir `/plataforma/cobrancas`.
 

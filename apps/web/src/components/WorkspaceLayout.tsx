@@ -67,7 +67,7 @@ export function WorkspaceLayout({ account, children }: { account: UserAccount; c
     </aside>
     <main className="dashboard-main">
       <header className="dashboard-topbar"><div className="dashboard-topbar__label"><span className="status-dot" /> {establishments.length > 1 ? <><label className="sr-only" htmlFor="switch-business">Estabelecimento ativo</label><select id="switch-business" className="dashboard-business-select" value={account.establishmentId} onChange={(e)=>void switchBusiness(e.target.value)}>{establishments.map((item)=><option key={item.id} value={item.id}>{item.name}</option>)}</select></> : account.establishmentName}</div><div className="dashboard-topbar__actions"><ThemeSwitch theme={theme} onToggle={toggleTheme} /><button className="text-button" onClick={logout} disabled={loggingOut}>{loggingOut ? 'Saindo…' : 'Sair da conta'} <span aria-hidden="true">↗</span></button></div></header>
-      <div className="dashboard-content" ref={tableContentRef}>{error && <p className="form-error" role="alert">{error}</p>}{children}<footer className="dashboard-footer">BeautyBarber · Gestão do estabelecimento · Seus dados ficam separados por empresa.</footer></div>
+      <div className="dashboard-content" ref={tableContentRef}>{error && <p className="form-error" role="alert">{error}</p>}{children}<footer className="dashboard-footer">Beauty Barber Studio · Gestão do estabelecimento · Seus dados ficam separados por empresa.</footer></div>
     </main>
   </div>;
 }

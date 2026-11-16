@@ -103,7 +103,7 @@ export function SettingsPage() {
       await apiRequest('/api/account/logo',{method:'DELETE'});
       setBusiness((current)=>current?{...current,hasLogo:false}:current);
       setLogoFile(null);
-      setNotice('Logotipo removido. A marca BeautyBarber continuará na plataforma.');
+      setNotice('Logotipo removido. A marca Beauty Barber Studio continuará na plataforma.');
     } catch (cause) {setError(cause instanceof Error?cause.message:'Não foi possível remover o logotipo.');}
     finally {setSaving(false);}
   }
@@ -227,7 +227,7 @@ export function SettingsPage() {
 
     {business && <section className="management-editor settings-section" aria-labelledby="branding-title">
       <div className="management-editor__header"><div><p className="eyebrow">IDENTIDADE DO ESTABELECIMENTO</p><h2 id="branding-title">Logotipo do salão ou barbearia</h2></div></div>
-      <p className="settings-description">Use o logotipo do seu negócio na página pública de agendamento. A identidade e o ícone do BeautyBarber permanecem iguais no sistema. Aceitamos PNG com até 256 KB e 1024 × 1024 pixels.</p>
+      <p className="settings-description">Use o logotipo do seu negócio na página pública de agendamento. A identidade e o ícone do Beauty Barber Studio permanecem iguais no sistema. Aceitamos PNG com até 256 KB e 1024 × 1024 pixels.</p>
       <div className="settings-logo-preview">{business.hasLogo ? <img key={logoRevision} src={`/api/branding/${encodeURIComponent(business.slug)}/logo?v=${logoRevision}`} alt={`Logotipo de ${business.name}`} /> : <p>Nenhum logotipo personalizado cadastrado.</p>}</div>
       {account.role==='owner' && <form className="management-form" onSubmit={(event)=>void uploadBusinessLogo(event)}>
         <label className="management-form__wide">Escolha um arquivo PNG<input type="file" accept="image/png,.png" disabled={saving} onChange={(event)=>setLogoFile(event.target.files?.[0]??null)} /></label>

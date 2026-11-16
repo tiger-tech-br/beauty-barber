@@ -1,10 +1,10 @@
-# BeautyBarber no Android — APK
+# Beauty Barber Studio no Android — APK
 
-O aplicativo Android do BeautyBarber fica em `android-beautybarber/` e abre o **mesmo site HTTPS** onde estão o frontend e a API. Assim, o login, as sessões, o agendamento e as assinaturas usam a mesma origem e os mesmos dados do BeautyBarber. O aplicativo não usa banco local ou acesso ao PetCore.
+O aplicativo Android do Beauty Barber Studio fica em `android-beautybarber/` e abre o **mesmo site HTTPS** onde estão o frontend e a API. Assim, o login, as sessões, o agendamento e as assinaturas usam a mesma origem e os mesmos dados do Beauty Barber Studio. O aplicativo não usa banco local ou acesso ao PetCore.
 
 ## Antes do APK final
 
-1. Publicar e validar o BeautyBarber em subdomínio HTTPS próprio na Hostinger VPS, sem alterar o proxy e o banco do PetCore.
+1. Publicar e validar o Beauty Barber Studio em subdomínio HTTPS próprio na Hostinger VPS, sem alterar o proxy e o banco do PetCore.
 2. Ter um computador com Android Studio, Android SDK Platform 35, Java 17+ e Gradle 8.13 instalado. O diretório contém o projeto Android nativo; não precisa instalar Capacitor.
 3. Origem aprovada pelo proprietário: `https://beautybarber.tigertech.dev.br`. Ela já é o destino padrão do projeto Android. O aplicativo **não funciona** até que esse endereço tenha DNS e HTTPS válidos e o site esteja efetivamente publicado. O APK compilado antes disso não deve ser distribuído.
 
@@ -27,11 +27,11 @@ Se o Gradle não estiver instalado no terminal, o projeto pode ser compilado pel
 
 ## APK de teste pelo GitHub Actions
 
-O repositório `tiger-tech-br/beauty-barber` compila automaticamente um **APK de desenvolvimento** quando o projeto Android ou seu workflow mudam na branch `main`. Também é possível iniciar uma execução manual em **Actions → BeautyBarber APK debug → Run workflow**, informando a origem HTTPS.
+O repositório `tiger-tech-br/beauty-barber` compila automaticamente um **APK de desenvolvimento** quando o projeto Android ou seu workflow mudam na branch `main`. Também é possível iniciar uma execução manual em **Actions → Beauty Barber Studio APK debug → Run workflow**, informando a origem HTTPS.
 
 Depois de uma execução bem-sucedida:
 
-1. Abra **Actions → BeautyBarber APK debug** e escolha a execução concluída.
+1. Abra **Actions → Beauty Barber Studio APK debug** e escolha a execução concluída.
 2. Na seção **Artifacts**, baixe `beautybarber-apk-debug`.
 3. Extraia o ZIP. Nele estarão `app-debug.apk` e `app-debug.apk.sha256`, que permite conferir o hash do arquivo.
 4. Esse APK utiliza `https://beautybarber.tigertech.dev.br` como destino padrão. **A compilação pode passar mesmo que o site ainda não esteja publicado.** Nesse caso, o aplicativo exibirá erro de conexão; não distribua nem venda o APK até validar DNS, HTTPS, login e agendamento no celular real.

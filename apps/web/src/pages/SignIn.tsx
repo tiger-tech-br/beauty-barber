@@ -25,7 +25,7 @@ export function SignIn() {
     } finally { setLoading(false); }
   }
 
-  return <AuthLayout title="Acessar BeautyBarber" description="Entre com o e-mail e a senha cadastrados.">
+  return <AuthLayout title="Acessar Beauty Barber Studio" description="Entre com o e-mail e a senha cadastrados.">
     <form className="auth-form" onSubmit={submit}>
       <label htmlFor="login-email">E-mail</label><input id="login-email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seuemail@exemplo.com" />
       <label htmlFor="login-password">Senha</label><input id="login-password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Digite sua senha" />

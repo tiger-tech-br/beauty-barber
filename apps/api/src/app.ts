@@ -278,7 +278,7 @@ app.post('/api/auth/reset-request', authRateLimit, async (req, res, next) => {
       `, [user.id,sessionTokenHash(token)]);
       const link = `${settings.webOrigin}/redefinir-senha?token=${encodeURIComponent(token)}`;
       try {
-        await sendTransactionalEmail({ to: parsed.data.email,subject:'Recuperação de senha — BeautyBarber',
+        await sendTransactionalEmail({ to: parsed.data.email,subject:'Recuperação de senha — Beauty Barber Studio',
           idempotencyKey:`beautybarber-password-reset-${saved.rows[0]!.id}`,
           html:`<div style="font-family:Arial,sans-serif;color:#20262D;line-height:1.7"><h1 style="color:#244B50">Redefinir senha</h1>
             <p>Olá, ${escapeHtml(user.full_name)}.</p><p>Para criar uma nova senha, <a href="${link}">acesse este link seguro</a>.</p>

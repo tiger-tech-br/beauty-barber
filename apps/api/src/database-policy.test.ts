@@ -8,7 +8,7 @@ test('a API nunca utiliza o banco PetCore por engano', () => {
   }
 });
 
-test('em produção aceita somente o banco BeautyBarber', () => {
+test('em produção aceita somente o banco Beauty Barber Studio', () => {
   assert.equal(beautyBarberDatabaseName('postgresql://bb:senha@db:5432/beautybarber',true),'beautybarber');
   assert.throws(()=>beautyBarberDatabaseName('postgresql://bb:senha@db:5432/beautybarber_test',true),/BLOQUEADO/);
   assert.equal(beautyBarberDatabaseName('postgres://bb:senha@localhost:5432/beautybarber_test',false),'beautybarber_test');

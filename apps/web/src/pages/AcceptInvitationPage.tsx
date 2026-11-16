@@ -36,7 +36,7 @@ export function AcceptInvitationPage() {
   return <AuthLayout title="Você foi convidado(a)." description={invite?`Equipe de ${invite.establishmentName}`:'Confira seus dados para aceitar o convite.'}>
     {loading?<p role="status">Verificando convite…</p>:invite?<><p className="auth-pending">E-mail convidado: <strong>{invite.email}</strong> · Função: {invite.role==='receptionist'?'Recepção':'Profissional'}.</p>
       <form className="auth-form" onSubmit={accept}><label>Seu nome completo<input required minLength={2} maxLength={120} autoComplete="name" value={name} onChange={(e)=>setName(e.target.value)} /></label><label>Senha<input required minLength={12} maxLength={128} type="password" autoComplete="current-password" value={password} onChange={(e)=>setPassword(e.target.value)} /></label>
-        <p className="auth-pending">Se você já usa o BeautyBarber com este e-mail, informe a senha atual. Se é sua primeira conta, crie uma senha com pelo menos 12 caracteres.</p>
+        <p className="auth-pending">Se você já usa o Beauty Barber Studio com este e-mail, informe a senha atual. Se é sua primeira conta, crie uma senha com pelo menos 12 caracteres.</p>
         {error&&<p className="form-error" role="alert">{error}</p>}
         <button className="button button--primary button--full" type="submit" disabled={saving}>{saving?'Aceitando…':'Aceitar convite'}</button>
       </form></>:<p className="form-error" role="alert">{error}</p>}

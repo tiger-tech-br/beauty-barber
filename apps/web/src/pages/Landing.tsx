@@ -71,7 +71,7 @@ export function Landing() {
         <p className="landing-plans__disclaimer">Cadastre seu estabelecimento para acessar os links de assinatura no painel. Valores, condições e disponibilidade são confirmados no PagBank. A liberação depende de conferência do pagamento.</p>
       </div></section>
     </main>
-    <footer className="site-footer"><div className="site-container site-footer__inner"><Logo inverse={true} link={false} /><p>Agenda e gestão para salões e barbearias.</p><small>© {new Date().getFullYear()} BeautyBarber</small></div></footer>
+    <footer className="site-footer"><div className="site-container site-footer__inner"><Logo inverse={true} link={false} /><p>Agenda e gestão para salões e barbearias.</p><small>© {new Date().getFullYear()} Beauty Barber Studio</small></div></footer>
   </div>;
 }
 

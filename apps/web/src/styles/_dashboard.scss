@@ -2,7 +2,9 @@
 
 .dashboard-layout { min-height: 100vh; background: #f6f6f3; display: grid; grid-template-columns: 244px minmax(0, 1fr); }
 .dashboard-sidebar { min-height: 100vh; background: #1d3e42; display: flex; flex-direction: column; color: white; padding: 32px 22px 25px; position: sticky; top: 0; height: 100vh; }
-.dashboard-sidebar__brand { padding: 5px 12px 38px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.dashboard-sidebar__brand { padding: 5px 0 38px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.dashboard-sidebar__brand .logo-word { font-size: 18px; }
+.dashboard-sidebar__brand .logo-mark { width: 32px; height: 32px; }
 .dashboard-sidebar__brand > span { font-size: 9px; letter-spacing: .18em; color: #a7c6c2; display: block; margin-top: 17px; }
 .dashboard-sidebar__navigation { padding-top: 30px; }
 .dashboard-sidebar__navigation p { margin: 0 0 15px 13px; color: #9fb9b4; font-weight: 750; font-size: 9px; letter-spacing: .14em; }

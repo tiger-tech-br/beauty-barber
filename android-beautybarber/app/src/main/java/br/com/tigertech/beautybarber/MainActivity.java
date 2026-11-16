@@ -27,7 +27,7 @@ import android.widget.TextView;
 import java.util.Objects;
 
 /**
- * Aplicativo Android do BeautyBarber: mesma origem HTTPS do site e da API.
+ * Aplicativo Android do Beauty Barber Studio: mesma origem HTTPS do site e da API.
  * Nenhum endereço ou cookie do PetCore é utilizado.
  */
 public final class MainActivity extends Activity {
@@ -105,7 +105,7 @@ public final class MainActivity extends Activity {
                 // Nunca permitir a continuação após erro no certificado HTTPS.
                 handler.cancel();
                 pageFailed = true;
-                showError("Não foi possível validar a conexão segura do BeautyBarber.");
+                showError("Não foi possível validar a conexão segura do Beauty Barber Studio.");
             }
 
             @Override

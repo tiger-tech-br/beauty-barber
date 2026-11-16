@@ -93,6 +93,6 @@ export function PublicBookingPage() {
           </form>}
       </>}
     </main>
-    <footer className="public-booking__footer">Agendamento por BeautyBarber · Seus dados são utilizados apenas para a finalidade informada.</footer>
+    <footer className="public-booking__footer">Agendamento por Beauty Barber Studio · Seus dados são utilizados apenas para a finalidade informada.</footer>
   </div>;
 }

@@ -395,10 +395,10 @@ accountRouter.post('/team/invitations', inviteLimiter, async (req,res) => {
   if (mailConfigured()) {
     const company = await pool.query<{ name: string }>('SELECT name FROM establishments WHERE id=$1', [who(res).establishmentId]);
     try {
-      await sendTransactionalEmail({ to: data.email,subject: 'Convite para a equipe — BeautyBarber',
+      await sendTransactionalEmail({ to: data.email,subject: 'Convite para a equipe — Beauty Barber Studio',
         idempotencyKey: `beautybarber-invitation-${invitationId}`,
         html: `<div style="font-family:Arial,sans-serif;color:#20262D;line-height:1.7"><h1 style="color:#244B50">Convite para equipe</h1>
-        <p>Você foi convidado(a) para atuar em <strong>${escapeHtml(company.rows[0]!.name)}</strong> no BeautyBarber.</p>
+        <p>Você foi convidado(a) para atuar em <strong>${escapeHtml(company.rows[0]!.name)}</strong> no Beauty Barber Studio.</p>
         <p><a href="${link}">Aceitar convite</a></p><p>Este link vence em 48 horas. Se não reconhece o convite, ignore.</p></div>` });
       emailed = true;
     } catch (error) { console.error('[team-invitation-mail]',error); }

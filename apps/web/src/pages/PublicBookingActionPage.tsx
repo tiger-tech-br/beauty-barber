@@ -31,7 +31,7 @@ export function PublicBookingActionPage({ action }: { action: 'confirm' | 'cance
   }, [action]);
 
   return <div className="public-booking"><header className="public-booking__header"><Logo /></header><main className="public-booking__main"><div className="public-booking__panel">
-    <p className="eyebrow">BEAUTYBARBER</p><h1>{action === 'confirm' ? 'Confirmação de agendamento' : 'Cancelamento de agendamento'}</h1>
+    <p className="eyebrow">BEAUTY BARBER STUDIO</p><h1>{action === 'confirm' ? 'Confirmação de agendamento' : 'Cancelamento de agendamento'}</h1>
     {working && <p role="status">Processando sua solicitação…</p>}
     {error && <p className="form-error" role="alert">{error}</p>}
     {result && <p className="form-success" role="status">{result}</p>}

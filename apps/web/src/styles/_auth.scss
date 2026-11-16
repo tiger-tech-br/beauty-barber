@@ -26,5 +26,5 @@
 .auth-visual__quote p { font: 400 clamp(26px, 3vw, 42px)/1.28 $serif; letter-spacing: -.03em; }
 .auth-visual__rule { width: 75px; height: 2px; background: $accent; }
 @media (max-width: 900px) { .auth-layout { grid-template-columns: 1fr; } .auth-visual { display: none; } .auth-form-panel { padding-inline: 6vw; } }
-@media (max-width: 520px) { .auth-form-panel { padding: 25px 24px; } .auth-form-panel__content { padding: 55px 0; } .back-link { font-size: 11px; } .logo-word { font-size: 24px; } }
+@media (max-width: 520px) { .auth-form-panel__top { flex-wrap: wrap; } .auth-form-panel { padding: 25px 24px; } .auth-form-panel__content { padding: 55px 0; } .back-link { font-size: 11px; } .logo-word { font-size: 24px; } }
 

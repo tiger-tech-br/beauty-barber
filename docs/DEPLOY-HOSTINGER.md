@@ -1,14 +1,14 @@
 # Publicação na Hostinger VPS (preparação)
 
-Projeto preparado para a **mesma VPS que já hospeda o PetCore**, mas numa instalação totalmente separada. Usa Docker Compose: Caddy para interface e proxy interno da API, Express e **PostgreSQL 17 exclusivo do BeautyBarber**. **Não depende do Neon e não usa o banco do PetCore.**
+Projeto preparado para a **mesma VPS que já hospeda o PetCore**, mas numa instalação totalmente separada. Usa Docker Compose: Caddy para interface e proxy interno da API, Express e **PostgreSQL 17 exclusivo do Beauty Barber Studio**. **Não depende do Neon e não usa o banco do PetCore.**
 
-**Domínio informado pelo proprietário:** `tigertech.dev.br`. **Subdomínio aprovado pelo proprietário para o BeautyBarber:** `beautybarber.tigertech.dev.br`. O endereço está definido para a aplicação, **mas o DNS, HTTPS e o deploy ainda não foram configurados nem verificados**. O domínio principal `tigertech.dev.br` e as rotas do PetCore devem permanecer intactos.
+**Domínio informado pelo proprietário:** `tigertech.dev.br`. **Subdomínio aprovado pelo proprietário para o Beauty Barber Studio:** `beautybarber.tigertech.dev.br`. O endereço está definido para a aplicação, **mas o DNS, HTTPS e o deploy ainda não foram configurados nem verificados**. O domínio principal `tigertech.dev.br` e as rotas do PetCore devem permanecer intactos.
 
 O banco `beautybarber` está no serviço Docker `db` e usa o volume próprio `beautybarber_postgres_data`. O volume preserva os dados entre reinícios normais dos contêineres, mas **não é backup**.
 
 ## Separação obrigatória dos projetos
 
-| Item | PetCore | BeautyBarber |
+| Item | PetCore | Beauty Barber Studio |
 | --- | --- | --- |
 | Pasta na VPS | Preservar instalação atual | `/srv/beautybarber` (pasta nova) |
 | Projeto Docker Compose | Preservar nome atual | `beautybarber` |
@@ -19,9 +19,9 @@ O banco `beautybarber` está no serviço Docker `db` e usa o volume próprio `be
 | Cookie | Preservar sessão atual | `beautybarber_session` |
 | Portas públicas 80/443 | Preservar proxy atual | **Não ocupa essas portas** |
 
-**Nunca** copie a `DATABASE_URL` do PetCore para o BeautyBarber. Os dois PostgreSQL podem usar a **porta interna 5432** simultaneamente em redes Docker diferentes, sem conflito. A porta 5432 não é publicada no host.
+**Nunca** copie a `DATABASE_URL` do PetCore para o Beauty Barber Studio. Os dois PostgreSQL podem usar a **porta interna 5432** simultaneamente em redes Docker diferentes, sem conflito. A porta 5432 não é publicada no host.
 
-**Trava adicional no código:** a API do BeautyBarber se recusa a iniciar ou migrar um banco chamado `petcore`, `postgres` ou qualquer nome diferente de `beautybarber` em produção. Essa verificação reduz erros de configuração, mas **não substitui** banco e usuário separados com permissões mínimas.
+**Trava adicional no código:** a API do Beauty Barber Studio se recusa a iniciar ou migrar um banco chamado `petcore`, `postgres` ou qualquer nome diferente de `beautybarber` em produção. Essa verificação reduz erros de configuração, mas **não substitui** banco e usuário separados com permissões mínimas.
 
 ## Antes de publicar
 
@@ -31,7 +31,7 @@ O banco `beautybarber` está no serviço Docker `db` e usa o volume próprio `be
 3. Verificar que não existem recursos com os nomes `beautybarber_postgres_data` e `beautybarber_private`, nem processo usando a porta local `18080`.
 4. Criar `/srv/beautybarber` para este projeto, separado da pasta do PetCore.
 5. Após inspecionar a zona DNS atual, criar o registro apropriado para o subdomínio **aprovado** `beautybarber.tigertech.dev.br` apontando à VPS, preservando os registros DNS do domínio principal, PetCore, e-mails e validações. Se o subdomínio já tiver um registro, não substituí-lo automaticamente.
-6. Integrar a nova aplicação ao **proxy HTTPS que já atende o PetCore**, com roteamento por domínio para o BeautyBarber. Se o proxy também estiver num contêiner, o acesso à porta local exige inspeção das redes; `127.0.0.1` de outro contêiner não é o host.
+6. Integrar a nova aplicação ao **proxy HTTPS que já atende o PetCore**, com roteamento por domínio para o Beauty Barber Studio. Se o proxy também estiver num contêiner, o acesso à porta local exige inspeção das redes; `127.0.0.1` de outro contêiner não é o host.
 7. Configurar backups externos dos **dois bancos separadamente**, monitoramento e atualização de segurança.
 
 ## Configuração de ambiente
@@ -62,7 +62,7 @@ docker compose ps
 docker compose logs --tail=100 api
 ```
 
-O contêiner da API aplica as migrations **apenas no banco indicado por `DATABASE_URL`**. O Caddy do BeautyBarber atende por HTTP interno em `127.0.0.1:18080`; o proxy público existente é o responsável por HTTPS. **Não instalar outro proxy público competindo pelas portas 80/443.**
+O contêiner da API aplica as migrations **apenas no banco indicado por `DATABASE_URL`**. O Caddy do Beauty Barber Studio atende por HTTP interno em `127.0.0.1:18080`; o proxy público existente é o responsável por HTTPS. **Não instalar outro proxy público competindo pelas portas 80/443.**
 
 ### Onde estão armazenados os dados
 

@@ -18,7 +18,9 @@ a { color: inherit; text-decoration: none; }
 .button--full { width: 100%; justify-content: space-between; }
 .logo { display: inline-flex; align-items: center; gap: 10px; color: $ink; width: fit-content; }
 .logo-mark { width: 38px; height: 38px; object-fit: contain; flex-shrink: 0; }
-.logo-word { font-size: 23px; line-height: 1; letter-spacing: -.052em; font-weight: 750; }
+.logo-word { display: flex; flex-direction: column; gap: 3px; font-size: 23px; line-height: 1; letter-spacing: -.052em; font-weight: 750; }
+.logo-word__main { white-space: nowrap; }
+.logo-word__suffix { font-size: 14px; line-height: 1.25; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; }
 .logo-word__accent { font-weight: 650; letter-spacing: -.05em; }
 .logo-dot { color: $accent; }
 .logo--inverse { color: white; }
